@@ -50,5 +50,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
+<!-- configurarción de apache
 
+En el xampp realicé la modificación del archivo httpd.conf, buscando DocumentRoot y
+agregué estas rutas donde está la pagina que hice: 
+DocumentRoot "C:/xampp/htdocs/filcopor"
+<Directory "C:/xampp/htdocs/filcopor">
+
+y luego arranqué el apache
+
+El archivo hosts que se encuentra en la carpeta C:\Windows\System32\drivers\etc
+agregué estas paginas de pruebas 
+127.0.0.1 www.playboy.com
+127.0.0.1 www.sexporn.com 
+
+
+
+
+-->
 </html>

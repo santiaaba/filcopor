@@ -34,15 +34,6 @@
                                 return $validURL;
                             }echo "El sitio << ".current_url()." >> ha sido filtrado";
 
-// echo "-------------------";
-
-// if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
-// Append the host(domain name, ip) to the URL.
-// $url = $_SERVER['HTTP_HOST'];
-// Append the requested resource location to the URL.
-// $url = $_SERVER['REQUEST_URI'];
-// echo $url;
-
 
                     ?>
 
@@ -52,30 +43,10 @@
                 <button type="hidde" name='url' value="<?php echo current_url() ?>"  class="btn btn-primary">  Reportar como no pornográfico</button>
                         </form>            
             </div>
-            <!--<div id="shortUrlResult"></div>-->
         </div>
     </div>
 
    
-    <script>
-        document.getElementById("reportarUrl").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const form = event.target;
-            const formData = new FormData(form);
-
-            fetch("http://localhost/filcopor/api.php", {
-                    // fetch("https://guskit.com/shortUrls/api.php", {
-                    method: "POST",
-                    body: JSON.stringify(Object.fromEntries(formData)),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-              
-        });
-
-
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>

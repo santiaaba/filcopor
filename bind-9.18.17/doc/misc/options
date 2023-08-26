@@ -33,7 +33,7 @@ http <string> {
 	endpoints { <quoted_string>; ... };
 	listener-clients <integer>;
 	streams-per-connection <integer>;
-}; // may occur multiple times
+}; // not configured, may occur multiple times
 
 key <string> {
 	algorithm <string>;
@@ -149,14 +149,14 @@ options {
 	fstrm-set-output-queue-model ( mpsc | spsc ); // not configured
 	fstrm-set-output-queue-size <integer>; // not configured
 	fstrm-set-reopen-interval <duration>; // not configured
-	geoip-directory ( <quoted_string> | none );
+	geoip-directory ( <quoted_string> | none ); // not configured
 	glue-cache <boolean>; // deprecated
 	heartbeat-interval <integer>;
 	hostname ( <quoted_string> | none );
-	http-listener-clients <integer>;
-	http-port <integer>;
-	http-streams-per-connection <integer>;
-	https-port <integer>;
+	http-listener-clients <integer>; // not configured
+	http-port <integer>; // not configured
+	http-streams-per-connection <integer>; // not configured
+	https-port <integer>; // not configured
 	interface-interval <duration>;
 	ipv4only-contact <string>;
 	ipv4only-enable <boolean>;
@@ -167,7 +167,7 @@ options {
 	lame-ttl <duration>;
 	listen-on [ port <integer> ] [ tls <string> ] [ http <string> ] { <address_match_element>; ... }; // may occur multiple times
 	listen-on-v6 [ port <integer> ] [ tls <string> ] [ http <string> ] { <address_match_element>; ... }; // may occur multiple times
-	lmdb-mapsize <sizeval>;
+	lmdb-mapsize <sizeval>; // not configured
 	lock-file ( <quoted_string> | none );
 	managed-keys-directory <quoted_string>;
 	masterfile-format ( raw | text );
@@ -456,7 +456,7 @@ view <string> [ <class> ] {
 	}; // may occur multiple times
 	key-directory <quoted_string>;
 	lame-ttl <duration>;
-	lmdb-mapsize <sizeval>;
+	lmdb-mapsize <sizeval>; // not configured
 	managed-keys { <string> ( static-key | initial-key | static-ds | initial-ds ) <integer> <integer> <integer> <quoted_string>; ... }; // may occur multiple times, deprecated
 	masterfile-format ( raw | text );
 	masterfile-style ( full | relative );

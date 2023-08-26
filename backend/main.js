@@ -2,6 +2,7 @@ const express = require('express')
 const Database = require("./libs/db_v2.js");
 const bodyParser = require("body-parser")
 const cors = require('cors')
+const fqdn = require ('fqdn.js')
 
 var app = express()
 
@@ -12,19 +13,30 @@ var app = express()
 app.use(bodyParser.json())
 app.use(cors())
 
-var path = "/v1/filcopor"
+var path = "/v1/"
 
+api.filcopor.com.ar/v1/login
 
 /* para el login y logout */
 app.post(path + "/login", user.login)
 app.get(path + "/logout", user.logout)
 
+/* Recupero de contraseña */
+app.post(path + "/restore", user.restore)
+
 /*******************************
 		Para el usuario final
 *******************************/
 
-/* Para eportar un fqdn */
+/* Para reportar un fqdn */
 app.post(path + "/fqdn/report", fqdn.report)
+/*
+BODY
+{
+   fqdn: "www.poringa.net"
+   "consideration": "[ porno | free ]"
+}
+*/
 
 /* Para consultar si un fqdn es o no pornográfico */
 app.get(path + "/fqdn/:fqdn", fqdn.search)
@@ -32,6 +44,7 @@ app.get(path + "/fqdn/:fqdn", fqdn.search)
 /* Para registrarse y desregistrarse */
 app.post(path + "/registry", user.registry)
 app.delete(path + "/registry/:userid", user.unregistry)
+
 
 /*******************************
 		Para el usuario Admin

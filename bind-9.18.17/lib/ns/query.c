@@ -74,6 +74,10 @@
 #include <ns/stats.h>
 #include <ns/xfrout.h>
 
+/* FILCOPOR */
+#include <db.h>
+/* FILCOPOR */
+
 #if 0
 /*
  * It has been recommended that DNS64 be changed to return excluded
@@ -5534,6 +5538,136 @@ ns__query_start(query_ctx_t *qctx) {
 
 	CALL_HOOK(NS_QUERY_START_BEGIN, qctx);
 
+	/* FILCOPOR */
+	char *s_aux;
+	int ret;
+	DB *dbp;
+	DBT key, data;
+	unsigned int count_aux;
+	int i,j, existense;
+	char namebuff_aux[DNS_NAME_FORMATSIZE];
+	char namebuff2_aux[DNS_NAME_FORMATSIZE];
+	bool encontre;
+
+	/*Abrimos la DB. Esto es momentaneo */
+	/*
+	if ((ret = db_create(&dbp, NULL, 0)) != 0) {
+		isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "Error al crear la DB: %s",db_strerror(ret));
+   }
+
+	ret = dbp->open(dbp,NULL, "fqdn_porn.db", NULL, DB_BTREE, DB_CREATE, 0664);
+   if (ret != 0){
+		isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "Error al abrir la DB");
+   }
+	*/
+	/* Hasta aca!!! Debemos encontrarle un mejor lugar */
+
+	isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "FILCOPOR----------%s","-");
+
+	isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "Query Type: %u",qctx->type);
+
+	s_aux = (char*)malloc(qctx->client->query.qname->length + 1);
+	memcpy(s_aux,qctx->client->query.qname->ndata,qctx->client->query.qname->length);
+
+	isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "Query: %s",s_aux);
+
+	/* Obtenemos la cantidad de label que posee el name */
+	count_aux = dns_name_countlabels(qctx->client->query.qname);
+	isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "El name posee: %u labels",count_aux);
+
+	dns_name_format(qctx->client->query.qname, namebuff_aux, sizeof(namebuff_aux));
+	isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "El name posee: %s como name de tamano %lu",namebuff_aux,strlen(namebuff_aux));
+
+	/* El Name se revisa de atras hacia delante */
+	i = strlen(namebuff_aux);
+	j = i;
+	encontre=false;
+	memset(&key, 0, sizeof(DBT));
+	memset(&data, 0, sizeof(DBT));
+	data.data = &existense;
+	data.size = sizeof(int);
+	while(!encontre && j > -1){
+		j--;   /* Ya que el por cada iteración arrancamos de "." */
+		while(j > -1 && namebuff_aux[j] != '.'){
+			j--;
+		}
+		memcpy(namebuff2_aux,&namebuff_aux[j+1],i-j-1);
+		namebuff2_aux[i-j-1] = '\0';
+
+		count_aux = dns_name_countlabels(qctx->client->query.qname);
+		isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+            DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+            "Revisamos: %s i:%i, j:%i, i-j-1:%i",namebuff2_aux,i,j,i-j-1);
+
+		/*
+		key.data = namebuff2_aux;
+		key.size = i-j-2;	// -2 ya que \0 no nos interesa 
+		*/
+
+		/*
+		if(dbp->get(dbp, NULL, &key, &data, 0)){
+			encontre=true;
+			isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+         	   DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+           	 	"Encontré PORNO");
+		}
+		*/
+
+		/* Forzamos a que es porno */
+		encontre = true;
+	}
+
+	if(encontre){
+		isc_log_write(dns_lctx, DNS_LOGCATEGORY_RESOLVER,
+        	   DNS_LOGMODULE_RESOLVER, ISC_LOG_INFO,
+       	 	"El dominio: %s es PORNO",namebuff2_aux);
+
+		/* Intentamos hardcodear la IP. Supongamos que es
+			201.202.203.204 */
+
+		/*
+		qctx->rdataset = ns_client_newrdataset(qctx->client);
+
+		result = qctx_prepare_buffers(qctx, &buffer);
+		if (result != ISC_R_SUCCESS) {
+			QUERY_ERROR(qctx, result);
+			return (ns_query_done(qctx));
+		}
+
+		return (ns_query_done(qctx));
+
+		result = dns_rdataset_totext(rdataset, owner, false, false, &target);
+		isc_buffer_usedregion(&target, &r);*/
+
+
+		/* Otra opción es que cambiemos la query a drede
+			y coloquemos xxx o xx al final de la misma. Y que siga
+			su camino. Para ello debemos crear las zonas xx y xxx. El
+			tema es que no regrese con el "xxx" en la respuesta */
+
+/*
+		qctx->client->query.qname->ndata[qctx->client->query.qname->length-1] = 'x';
+		qctx->client->query.qname->ndata[qctx->client->query.qname->length-2] = 'x';
+*/
+		
+	}
+	
+	/* FILCOPOR */
+	
 	/*
 	 * If we require a server cookie then send back BADCOOKIE
 	 * before we have done too much work.

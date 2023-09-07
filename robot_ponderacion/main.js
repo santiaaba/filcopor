@@ -1,12 +1,12 @@
 const https = require('https')
 const http = require('http')
-const dns = require('dns')
+//const dns = require('dns')
 const Database = require('./db_v2.js')
 const config = require('./config.js')
 const rules = require('./rules.js')
 const httpClient = require('../libs/httpClient')
 
-const MAX_ROWS = 50
+const MAX_ROWS = 10
 
 function sleep(ms){
 	console.log("Aguardamos ",ms/1000,"segundos")
@@ -51,7 +51,11 @@ function ponderamos(site){
 				.then(ok=>{
 					console.log("ENTROOOOOO A PONDERAR: ",s.name)
 					/* Ponderamos */
-					return ponderation(s,ok)
+					//Removemos los saltos de página y mas de dos espacios en blanco
+					let str = ok.replace(/\r?\n|\r/g," ");
+					str = str.replace(/\s\s+/g," ");
+					//console.log(str)
+					return ponderation(s,str)
 				})
 				.then(ok=>{
 					let total = 0
@@ -69,7 +73,7 @@ function ponderamos(site){
 					else if(ok > config.threshold.middle)
 						isPorn = 'undefined'
 	
-					console.log("TOTAL",total,isPorn,s.id)
+					console.log("TOTAL:",total,"- Es porno:",isPorn,"- Id en la DB:",s.id)
 					return db.query("update fqdn set ponderation=?,isPorn=? where id=?",
 							[total,isPorn,s.id])
 				})
@@ -78,17 +82,14 @@ function ponderamos(site){
 				})
 				.catch(err=>{
 					console.log("ERROOOOR AL OBTENER EL SITIO: ",s.name,"(",err,")")
-					console.log(err)
-					if(err == 'ENOTFOUND' || err == 'EAI_AGAIN'){
-						db.query("delete from fqdn where id=?",[s.id])
-						.then(ok=>{
-							resolv()
-						})
-						.catch(err=>{
-							console.log(err)
-							resolv()
-						})
-					}
+					db.query("update fqdn set isPorn='inexist' where id=?",[s.id])
+					.then(ok=>{
+						resolv()
+					})
+					.catch(err=>{
+						console.log(err)
+						resolv()
+					})
 				})
 			})
 		})
@@ -113,11 +114,13 @@ async function main(){
 			console.log("Iniciamos")
 			await ponderamos()
 			console.log("Esperamos")
-			await sleep(10000)   /* 10 segundos */
+			await sleep(5000)   /* 5 segundos */
 		}
 	} else {
 		await ponderamos(site)
+		console.log("Terminamos de ponderar",site)
 	}
+	db.close()
 }
 
 main()

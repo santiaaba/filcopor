@@ -12,6 +12,7 @@ module.exports = {
 		dns2: "8.8.4.4"
 	},
 	cautive: "200.99.88.22",
+	cautive_loggin: "100.100.100.100",
 	lmdb:{
 		name: "my-db"
 	}

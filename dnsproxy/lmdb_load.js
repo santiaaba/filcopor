@@ -5,6 +5,10 @@
 
 	De la tabla indicada solo nos interesan aquellos
 	dominios que son reconocidos como pornográficos
+
+	Los dominios se leen de la columna "domain" de la
+	tabla fqdn. Se debe agregar el "." al final de
+	cada string
 */
 
 const lmdb = require('lmdb')
@@ -13,8 +17,8 @@ const config = require('./config.js')
 
 const cargando = async data =>{
 	for (let l of data){
-		//console.log("Agregando: ",l.name)
-		await myDB.put(l.name, 1)
+		console.log("Agregando: ",l.domain + ".")
+		await myDB.put(l.domain + ".", 1)
 		//console.log("AGRAGADO!!!:",myDB.get(l.name).someText)
 	}
 }

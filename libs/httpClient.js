@@ -7,7 +7,7 @@ getSite: function(protocol,fqdn,path,level){
 	/* El cuarto parámetro no se pasa por defecto
 		y se utiliza para controlar que no ocurra una
 		recurrencia infinita */
-	console.log("GET SITE: ",protocol,fqdn,path,level)
+	console.log("GET SITE - protocol:",protocol,"- fqdn:",fqdn,"- path:",path,"- level:",level)
 	return new Promise((resolv,reject)=>{
 		//console.log("GET SITE entro")
 		if(level && level == 10){
@@ -23,7 +23,7 @@ getSite: function(protocol,fqdn,path,level){
 			path: path,
 			method:'GET',
 			agent:false,
-			timeout: 20000
+			timeout: 10000
 		}
 
 		if(protocol == 'https'){
@@ -36,34 +36,28 @@ getSite: function(protocol,fqdn,path,level){
 		let content=""
 		let request = client.get(vars, (res)=>{
 			if(res.statusCode == 301 || res.statusCode == 302){
-				//console.log("Redirigiendo: ",protocol + "://" + fqdn + path,"=>",res.headers.location)
-				let r = /(https?)(:\/\/)?([^\/\?]*)(.*)/	/* Esto es mucho muy importante */
+				console.log("Redirigiendo: ", res.headers.location, "statusCode:",res.statusCode)
+				let r = /^(https?)?:?(\/\/)?([^\/\?:]*)(.*)/	/* Esto es mucho muy importante */
 				let match = r.exec(res.headers.location)
 				//console.log("MATCH:",match)
-				if(match && match[1] && match[3]){
-					//console.log("Tenemos todo como para redirigir")
-					/* Tenemos todo como para redirigir */
-					module.exports.getSite(match[1],match[3],match[4],level?level+1:1)
-					.then(ok=>{
-						resolv(ok)
-					})
-					.catch(err=>{
-						reject(err)
-					})
-				} else {
-					/* Es una redireccion parcial donde fijura solo un cambio
-						de directorio. Ej:  www.algo.com.ar => /otracosa/ */
-					//console.log("redireccion parcial: ",res.headers.location)
-					module.exports.getSite(protocol,fqdn,res.headers.location,level?level+1:1)
-					.then(ok=>{
-						//console.log("SISI. Paso")
-						resolv(ok)
-					})
-					.catch(err=>{
-						//console.log("getSite catch:",err)
-						reject(err)
-					})
-				}
+				console.log("MATCH[4]:",match[4])
+
+				/* Redireccion donde Cambiamos el fqdn */
+				//console.log("Tenemos todo como para redirigir")
+				/* Tenemos todo como para redirigir */
+				console.log("REDIRIGIMOS:",match[1]?match[1]:protocol,match[3],match[4],level?level+1:1)
+				module.exports.getSite(
+					match[1]?match[1]:protocol,
+					match[3]?match[3]:fqdn,
+					match[4],
+					level?level+1:1
+				)
+				.then(ok=>{
+					resolv(ok)
+				})
+				.catch(err=>{
+					reject(err)
+				})
 			} else {
 				//console.log("Trayendo datos del sitio: ",fqdn + path)
 				res.on("data", function (data) {
@@ -87,7 +81,7 @@ getSite: function(protocol,fqdn,path,level){
 
 		request.on('error', function(e) {
 			//console.log(e)
-			console.error("ERROR =>",fqdn,":",e.code);
+			console.error("ERROR => protocol:",protocol,"fqdn:",fqdn,"path:",path,"Error:",e.code);
 			reject(e.code)
 		})
 	})

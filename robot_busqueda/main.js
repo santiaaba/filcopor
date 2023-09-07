@@ -5,14 +5,21 @@ const Database = require('./db_v2.js')
 const httpClient = require('../libs/httpClient')
 const config = require('./config.js')
 
-const regex = /href=\"(https?):\/\/([^\"\/\?]+)([^\"]*)\"/gi
+const regex = /href=[\"\'](https?):\/\/([^\"\/\?\%\s\']+)([^\"\']*)[\"\']/gi
 const regex_r = /\.(png|jpg|gif|css|js|svg|webp)$/
-const regex_d = /[^\.]*\.(.*)$/
+//const regex_d = /[^\.]*\.(.*)$/
+const regex_d = /^[\w\-]*\.([\w\-\.]*)$/
 
 const ENDLEVEL = 3
 const CANTLINKS = 50
+const SLEEP = 5000
 
-let yarevisados = new Array()
+const dnsResolver = new dns.Resolver({
+	timeout: 1000,
+	tries: 2
+})
+
+let yarevisados = []
 
 function sleep(ms){
 	console.log("Aguardamos ",ms/1000,"segundos")
@@ -24,22 +31,34 @@ function sleep(ms){
 function reduceCNAME(fqdn){
 	/* Reduce un CNAME hasta retornar la URL
 		que ya no responde con un CNAME */
+	//console.log("Reduciendo CNAME:",fqdn)
 	return new Promise((resolv,reject)=>{
-		dns.resolveCname(fqdn,(err,url)=>{
+		//console.log("buscando CNAME:",fqdn)
+		dnsResolver.resolveCname(fqdn,(err,url)=>{
+			//console.log("hemos resuelto CNAME:",fqdn)
 			if(!err){
-				/* Continuamos reduciendo */
 				reduceCNAME(url[0])
 				.then(ok=>{
 					resolv(ok)
 				})
+				.catch(err=>{
+					reject(err)
+				})
 			} else {
-				resolv(fqdn)
+				//console.log("ERR:",err.code)
+				if(err.code == "ENODATA"){
+					//console.log("reducido a :",fqdn)
+					resolv(fqdn)
+				} else {
+					reject("ERROR de resolucion CNAME")
+				}
 			}
 		})
+
 	})
 }
 
-function getDomain(fqdn){
+function getDomain(fqdn,original){
 	/* Dado un fqdn retorna el primer subdominio.
 		Para ellos consulta el NS del fqdn pasado por
 		parámetro. Si responde con un conjunto de registros
@@ -51,30 +70,49 @@ function getDomain(fqdn){
 		esperaríamos que no fuese así. Ésto es porque
 		www.tube8.fr es en realidad un CNAME de tube8.fr.
 		Es por ello que primero debemos reducir el CNAME. */
+		/* Se verifica no entrar en un loop infinito */
 
-	//console.log("getDomain:",fqdn)
+	//console.log("--------------------------")
+	//console.log("getDomain:",fqdn,original)
 	return new Promise((resolv,reject)=>{
-		reduceCNAME(fqdn)
-		.then(fqdn=>{
-			dns.resolveNs(fqdn,(err,addr)=>{
-				if(err != null){
-					let r = regex_d.exec(fqdn)
-					if(r){
-						getDomain(r[1])
-						.then(ok=>{
+		let r = regex_d.exec(fqdn)
+		if(!r){
+			reject("fqdn invalido!")
+		} else {
+			if (fqdn == original)
+				reject("getDomain - Recursividad comprometida:",fqdn,original)
+			else {
+				reduceCNAME(fqdn)
+				.then(ok=>{
+					dnsResolver.resolveNs(ok,(err,addr)=>{
+						if(err != null){
+							let r = regex_d.exec(ok)
+							if(r){
+								if (ok == original){
+									reject("No hay dominio")
+								} else {
+									getDomain(r[1],original?original:fqdn)
+									.then(ok=>{
+										resolv(ok)
+									})
+									.catch(err=>{
+										reject(err)
+									})
+								}
+							} else {
+								reject("No hay dominio")
+							}
+						} else {
 							resolv(ok)
-						})
-						.catch(err=>{
-							reject(err)
-						})
-					} else {
-						reject("No hay dominio")
-					}
-				} else {
-					resolv(fqdn)
-				}
-			})
-		})
+						}
+					})
+	
+				})
+				.catch(err=>{
+					reject("No hay dominio")
+				})
+			}
+		}
 	})
 }
 
@@ -94,7 +132,6 @@ function searching(fqdn,path,level){
 			var sites = []
 	
 			console.log("Entrando a:",fqdn + path,"(level ",level,")")
-			//yarevisados.push(fqdn + path)
 			httpClient.getSite('http',fqdn,path)
 			.then(async ok => {
 				let match = null
@@ -102,7 +139,6 @@ function searching(fqdn,path,level){
 				while((match = regex.exec(ok)) !== null && j < CANTLINKS) {
 					if(!yarevisados.find(e => e == match['2'] + match['3'])){
 						let match_r = regex_r.exec(match['3'])
-						//console.log(match_r)
 						if(match_r == null){
 							yarevisados.push(match['2'] + match['3'])
 							sites.push({f1:match['2'],f2:match['3']})
@@ -115,7 +151,6 @@ function searching(fqdn,path,level){
 				p = []
 				sites.forEach(async s=>{
 					p.push(searching(s.f1,s.f2,level+1))
-					//await searching(s.f1,s.f2,level+1)
 				})
 
 				if(p.length > 0)
@@ -136,6 +171,9 @@ function searching(fqdn,path,level){
 }
 
 function findSites(initial){
+	/* Busca de forma recursiva URLs. Si initial
+		no viene definido entonces busca en la DB
+		una url a utilizar como semilla */
 	return new Promise((resolv)=>{
 		let p
 		if(initial){
@@ -168,9 +206,6 @@ function findSites(initial){
 				let p = []
 				let j = 0
 				unicos.forEach(u=>{
-				//while(j< unicos.length){
-				//	j++
-				//}
 					p.push(
 						new Promise((resolv)=>{
 							getDomain(u)
@@ -179,7 +214,6 @@ function findSites(initial){
 								resolv({site:u,domain:d})
 							})
 							.catch(err=>{
-								//console.log("getDomain ERROR: ",err)
 								resolv()
 							})
 						})
@@ -188,12 +222,14 @@ function findSites(initial){
 				return Promise.all(p)
 			})
 			.then(ok=>{
+				console.log("Ya tenemos los dominios!!!! Agregamos a la DB")
 				let p = []
 				ok.forEach(d=>{
 					if(d){
 						p.push(
 							new Promise((resolv)=>{
-								db.query("insert into fqdn(name,domain) values(?,?)",[d.site + ".",d.domain])
+								console.log("Agregando a la DB:",d.domain)
+								db.query("insert into fqdn(name,domain) values(?,?)",[d.site,d.domain])
 								.then(ok=>{
 									resolv({value:true,messaje:"Agregando: " + d.domain})
 								})
@@ -207,6 +243,7 @@ function findSites(initial){
 				return Promise.all(p)
 			})
 			.then(ok =>{
+				console.log("Todo agregado a la DB")
 				let cant=0
 				ok.forEach(r=>{
 					if(r.value)
@@ -231,39 +268,32 @@ function findSites(initial){
 	})
 }
 	
-/*************************
-         MAIN
- *************************/
-
-db = new Database(config.db);
-
-/* Seleccionamos una página semila de la DB. Tratamos
-	que sea de forma random y de caracter pornográfico
-	que que son las que en realidad nos interesan */
-
 async function main(){
-	let initial = process.argv[2]
-	let yarevisados = []
+	db = new Database(config.db);
 	if(process.argv[2]){
 		console.log("Semilla inicial:",process.argv[2])
-		await findSites(initial)
+		await findSites(process.argv[2])
 		db.close()
 	} else {
 		while(true){
-			console.log("Semilla inicial:",process.argv[2])
-			await findSites(initial)
-			initial = null
-			console.log("Esperamos")
-			await sleep(10000)	/* 10 segundos */
+			yarevisados = []
+			await findSites()
+			await sleep(SLEEP)	/* 10 segundos */
 		}
 	}
 }
 
-/*   DE rueba  */
-/*
-getDomain('www.eroticlive.nl')
-.then(ok=>{console.log("FIN DOMINIO:",ok)})
-.catch(err=>{console.log("FIN ERROR:",err)})
-*/
+/*************************
+         MAIN
+ *************************/
 
+/*
+getDomain(process.argv[2])
+.then(ok=>{
+	console.log("OK",ok)
+})
+.catch(err=>{
+	console.log("catch",err)
+})
+*/
 main()

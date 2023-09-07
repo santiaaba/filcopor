@@ -1,7 +1,11 @@
 module.exports = [
 	/******************* Ingles **********************/
 	{	name: "Sex or Porn 01",
-		r: /(sexy?|porn|adult)\s?(chats?|cam|tv|story|tube|videos?|party|games?|acts?|toy|comics?|movies?)/ig,
+		r: /(sexy?|porn|adult)\s?(chats?|cam|vr|tv|story|tube|videos?|party|games?|acts?|toy|comics?|movies?|dudes?)/ig,
+		p: 20
+	},
+	{	name: "Sex or Porn 02",
+		r: /(chats?|cam|vr|tv|story|tube|videos?|party|games?|acts?|toy|comics?|movies?|dudes?)[\s\-\_]?(sexy?|porn|adult)/ig,
 		p: 20
 	},
 	{	name: "Boobs 01",
@@ -14,7 +18,7 @@ module.exports = [
 	},
 	{	name: "Anal 02",
 		r: /(mom|teen|mature|casting|milf|granny|ebony|bbw|amateur|asian|hot|interracial)[\s_\-\.]?(anal|ass)/ig,
-		p: 10
+		p: 30
 	},
 	{	name: "Fisting 01",
 		r: /(anal|pussy|extreme|vagina|ass)[\s_\-\.]?fisting/ig,
@@ -25,8 +29,8 @@ module.exports = [
 		p: 50
 	},
 	{	name: "Clasic soft words 01",
-		r: /pornstar|orgasm|pussy|mastur(bate|bating|bation)|nipple|handjob|orgy|escort/ig,
-		p: 2
+		r: /pornstar|orgasm|pussy|mastur(bate|bating|bation)|nipple|handjob|orgy|escort|food\s?job|cameltoe|nude|pantyless|topless/ig,
+		p: 10
 	},
 	{	name: "Brunette 01",
 		r: /brunette\s?babes/ig,
@@ -53,9 +57,19 @@ module.exports = [
 		p: 30
 	},
 	{	name: "Restricted to adults 01",
-		r: /restricted\sto\sadults/ig,
-		p: 200
+		r: /restricted\sto\sadults|(site|page)\scontains\s(sexually|adult)\s((explicit|xxx)\s)?material/ig,
+		p: 2000
 	},
+	{	name: "Playmate 01",
+		r: /playmates?/ig,
+		p: 30
+	},
+	{	name: "Live Sex 01",
+		r: /live\ssex?/ig,
+		p: 40
+	},
+
+
 
 	/****************** Español *********************/
 
@@ -71,14 +85,19 @@ module.exports = [
 		r: /(im.gen(es)?|v.ideos?|libros?|historias?|clips?)[\s_\-\.]?(xxx|pornogr.ficos?|porno)/ig,
 		p: 20
 	},
+	{	name: "mayor +18 01",
+		r: /soy\smayor\sde\s18\sa.os/ig,
+		p: 100
+	},
+
 
 	/*********************   Links to porn pages ****************/
-	{	name: "links videos 01",
-		r: /(pornhub|xvideos|xhamster|youporn|redtube|4tubemate.com|porntubemate)/ig,
-		p: 45
+	{	name: "Mension videos 01",
+		r: /(pornhub|xvideos|xhamster|youporn|redtube|4tubemate.com|porntubemate|BangBros|Flirt4Free|Thug\sHunter|xnxx\.com|penthouse)/ig,
+		p: 95
 	},
-	{	name: "links 01",
-		r: /(adultfriendfinder|onlyfans|theporndude|brazzers|porndude)/ig,
+	{	name: "Mension sites 01",
+		r: /(playboy|adultfriendfinder|onlyfans|theporndude|brazzers|porndude)/ig,
 		p: 60
 	}
 

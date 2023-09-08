@@ -1,6 +1,5 @@
 const https = require('https')
 const http = require('http')
-//const dns = require('dns')
 const Database = require('./db_v2.js')
 const config = require('./config.js')
 const rules = require('./rules.js')
@@ -39,10 +38,6 @@ function ponderamos(site){
 		else
 			p = db.query("select id,name from fqdn where isPorn = 'toPonderate' limit ?",[MAX_ROWS])
 		p.then(ok=>{
-
-			/* Para pruebas hardcodeamos */
-			//ok = [{id:53,name:'twitter.com/porndudecasting'}]
-			/**/
 
 			console.log("Sitios a ponderar:",ok)
 			ok.forEach(s=>{

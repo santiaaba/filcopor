@@ -59,7 +59,7 @@ function itIsPorn(question){
 
 	i--	/* Ya que los array posee -1 elementos informados por length */
 	while(isPorn == undefined && i > -1){
-		console.log("LO es?:",myDB.get(fqdn))
+		//console.log("LO es?:",myDB.get(fqdn))
 		fqdn = partes[i] + "." + fqdn
 		isPorn = myDB.get(fqdn)
 		i--
@@ -83,13 +83,20 @@ function request(protocol,outerRequest,outerResponse){
 	})
 
 	function requestDone() {
-		outerResponse.send();
+		try {
+			outerResponse.send();
+		} catch(e){
+			console.log("FALLO")
+		} 
 	}
 
 	innerRequest.send();
 
 	innerRequest.on('message', function (err, innerResponse) {
 		//console.log('response', err, innerResponse.question[0], innerResponse.header.tc)
+		if(err){
+			console.log("HAY ERRROR!!!!!")
+		}
 
 		outerResponse.header.rcode = innerResponse.header.rcode;
 		outerResponse.header.tc = innerResponse.header.tc;
@@ -135,6 +142,7 @@ function proxy(outerRequest, outerResponse, logged) {
 	}
 
 	if(itIsPorn(outerRequest.question[0].name) && outerRequest.question[0].type == 1){
+		console.log(outerRequest.question[0].name," es PORNO!!!!!!")
 		/* Si es porno entonces retornamos una
 			ip de portal cautivo */
 		outerResponse.answer.push(
@@ -150,70 +158,15 @@ function proxy(outerRequest, outerResponse, logged) {
 		console.log('request', outerRequest.question[0].name, outerRequest._socket._socket.type)
 
 		request('udp',outerRequest,outerResponse)
-
-		/*
-        var innerRequest = dns.Request({
-            question: outerRequest.question[0],
-            server: {
-              address: '8.8.8.8',
-              type: outerRequest._socket._socket.type,
-              port: 53,
-            },
-            cache: false,
-        })
-
-        innerRequest.send();
-
-        outerResponse.header.rcode = SERVFAIL;
-
-		function requestDone() {
-            outerResponse.send();
-        }
-
-        innerRequest.on('message', function (err, innerResponse) {
-            console.log('response', err, innerResponse.question[0], innerResponse.header)
-
-			if(innerResponse.header.tc){
-				console.log("TRUNCADO")
-			}
-
-            outerResponse.header.rcode = innerResponse.header.rcode;
-
-            outerResponse.answer = innerResponse.answer;
-            outerResponse.additional = innerResponse.additional;
-            outerResponse.authority = innerResponse.authority;
-
-        });
-
-        innerRequest.on('end', function() {
-            requestDone();
-        })
-		*/
 	}
 
 }
 
 function handleRequest(request,response){
 	/* Maneja una query de DNS */
-	//console.log('REQUEST:',request._socket._socket.type)
-	//console.log('REQUEST:',request)
-	//console.log('request from', request.address.address, 'for', request.question[0].name);
-
 	let logged = isLogged(request.address.address)
-	//let f = []
 
 	proxy(request,response,logged)
-/*
-	request.question.forEach(question=>{
-		f.push(cb => proxy(request._socket._socket.type,question,response,cb,logged))
-	})
-*/
-	
-/*
-	async.parallel(f,function(){
-		response.send()
-	})
-*/
 }
 
 

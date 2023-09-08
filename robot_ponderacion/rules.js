@@ -1,7 +1,7 @@
 module.exports = [
 	/******************* Ingles **********************/
 	{	name: "Sex or Porn 01",
-		r: /(sexy?|porn|adult)\s?(chats?|cam|vr|tv|story|tube|videos?|party|games?|acts?|toy|comics?|movies?|dudes?)/ig,
+		r: /(sexy?|porn|adult|xxx)\s?(chats?|cam|vr|tv|story|tube|videos?|party|games?|acts?|toy|comics?|movies?|dudes?)/ig,
 		p: 20
 	},
 	{	name: "Sex or Porn 02",
@@ -68,6 +68,11 @@ module.exports = [
 		r: /live\ssex?/ig,
 		p: 40
 	},
+	{	name: "Keywords 01",
+		r: /name=\"keywords\"\scontent=\"(porn|sex|xxx)\"/ig,
+		p: 400
+	},
+
 
 
 

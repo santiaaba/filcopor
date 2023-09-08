@@ -27,7 +27,7 @@ getSite: function(protocol,fqdn,path,level){
 		}
 
 		if(protocol == 'https'){
-			client = https
+			client = https,
 			vars.port = 443
 			vars['rejectUnauthorized'] = false
       	vars['requestCert'] = true
@@ -40,7 +40,7 @@ getSite: function(protocol,fqdn,path,level){
 				let r = /^(https?)?:?(\/\/)?([^\/\?:]*)(.*)/	/* Esto es mucho muy importante */
 				let match = r.exec(res.headers.location)
 				//console.log("MATCH:",match)
-				console.log("MATCH[4]:",match[4])
+				//console.log("MATCH[4]:",match[4])
 
 				/* Redireccion donde Cambiamos el fqdn */
 				//console.log("Tenemos todo como para redirigir")

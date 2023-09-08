@@ -1,18 +1,10 @@
 {
-  "name": "dnsproxy",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "async": "^3.2.4",
-    "dns-proxy": "^1.1.0",
-    "lmdb": "^2.8.4",
+    "dns": "^0.2.2",
+    "lmdb": "^2.8.5",
     "mysql": "^2.18.1",
-    "native-dns": "^0.7.0"
+    "native-dns": "^0.7.0",
+    "native-node-dns": "^0.7.6"
   }
 }

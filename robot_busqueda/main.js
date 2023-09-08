@@ -272,6 +272,7 @@ async function main(){
 	db = new Database(config.db);
 	if(process.argv[2]){
 		console.log("Semilla inicial:",process.argv[2])
+		yarevisados.push(process.argv[2])
 		await findSites(process.argv[2])
 		db.close()
 	} else {

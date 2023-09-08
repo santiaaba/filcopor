@@ -1,8 +1,8 @@
 module.exports = {
 	db:{
 		user: 'filcopor',
-		pass: 'F1lcopoR',
-		host: 'localhost',
+		pass: 'fifilcoporpo',
+		host: '10.10.10.2',
 		database: 'filcopor',
 		connectionLimit: 5
    }

@@ -6,6 +6,10 @@ robot_busqueda/node_modules
 robot_ponderacion/node_modules
 dnsproxy/node_modules
 
+dnsproxy/.env
+robot_busqueda/.env
+robot_ponderacion/.env
+
 bind-9.18.17/**/*.la
 bind-9.18.17/**/*.o
 bind-9.18.17/**/*.lo

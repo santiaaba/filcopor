@@ -1,9 +1,9 @@
 module.exports = {
 	db:{
-		user: 'filcopor',
-		pass: 'fifilcoporpo',
-		host: '10.10.10.2',
-		database: 'filcopor',
+		user: process.env.DBUSER,
+		pass: process.env.DBPASS,
+		host: process.env.DBHOST,
+		database: process.env.DBNAME,
 		connectionLimit: 5
    }
 }

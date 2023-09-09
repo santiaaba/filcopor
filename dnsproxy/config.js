@@ -1,18 +1,18 @@
 module.exports = {
-	ips:['181.30.34.70'],
+	ips:[process.env.LISTEN_IPS],
 	db:{
-		user: 'filcopor',
-		pass: 'fifilcoporpo',
-		host: '10.10.10.2',
-		database: 'filcopor',
+		user: process.env.DB_USER,
+		pass: process.env.DB_PASS,
+		host: process.env.DB_HOST,
+		database: process.env.DB_NAME,
 		connectionLimit: 2
    },
 	recursive:{
-		dns1: "8.8.8.8",
-		dns2: "8.8.4.4"
+		dns1: process.env.RDNS1,
+		dns2: process.env. RDNS2
 	},
-	cautive: "181.30.34.70",
-	cautive_loggin: "181.30.34.75",
+	cautive: process.env.CAUTIVE,
+	cautive_loggin: process.env.LOGIN,
 	lmdb:{
 		name: "my-db"
 	}

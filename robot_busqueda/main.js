@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config()
 const https = require('https')
 const http = require('http')
 const dns = require("dns")

@@ -1,9 +1,11 @@
+const dotenv = require('dotenv').config()
 const https = require('https')
 const http = require('http')
 const Database = require('./db_v2.js')
 const config = require('./config.js')
 const rules = require('./rules.js')
 const httpClient = require('../libs/httpClient')
+
 
 const MAX_ROWS = 10
 

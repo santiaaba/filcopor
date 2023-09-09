@@ -1,5 +1,6 @@
 "use strict";
 
+const dotenv = require('dotenv').config()
 const {Resolver} = require('dns')
 const dns = require('native-node-dns')
 const packet = require('native-dns-packet');

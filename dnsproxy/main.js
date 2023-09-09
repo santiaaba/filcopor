@@ -35,6 +35,7 @@ function db_load(){
 			resolv("Ips cargadas de la base de datos")
 		})
 		.catch(err=>{
+			console.log(err)
 			reject("Error al cargar las ip desde la base de datos")
 		})
 	})

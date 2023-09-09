@@ -7,6 +7,9 @@ class Database {
 		//console.log(config)
 		this.connection = mysql.createPool({
 			connectionLimit: config.connectionLimit,
+			connectTimeout: 40000,
+			acquireTimeout: 40000,
+			timeout: 40000,
 			host: config.host,
 			user: config.user,
 			database: config.database,

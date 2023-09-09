@@ -6,7 +6,6 @@ const config = require('./config.js')
 const rules = require('./rules.js')
 const httpClient = require('../libs/httpClient')
 
-
 const MAX_ROWS = 10
 
 function sleep(ms){
@@ -40,8 +39,10 @@ function ponderamos(site){
 		else
 			p = db.query("select id,name from fqdn where isPorn = 'toPonderate' limit ?",[MAX_ROWS])
 		p.then(ok=>{
-
-			console.log("Sitios a ponderar:",ok)
+			if(ok.length > 0)
+				console.log("Sitios a ponderar:",ok)
+			else
+				console.log("No hay sitios a ponderar")
 			ok.forEach(s=>{
 				/* Buscamos el codigo */
 				httpClient.getSite('http',s.name)
@@ -102,6 +103,7 @@ function ponderamos(site){
          MAIN
  *************************/
 
+console.log("Conectando con la DB:",config.db.host)
 db = new Database(config.db);
 
 async function main(){

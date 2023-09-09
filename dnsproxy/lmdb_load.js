@@ -11,6 +11,7 @@
 	cada string
 */
 
+const dotenv = require('dotenv').config()
 const lmdb = require('lmdb')
 const Database = require('./db_v2.js')
 const config = require('./config.js')

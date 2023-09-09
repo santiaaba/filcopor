@@ -10,6 +10,8 @@ dnsproxy/.env
 robot_busqueda/.env
 robot_ponderacion/.env
 
+dnsproxy/my-db/lock.mdb
+
 bind-9.18.17/**/*.la
 bind-9.18.17/**/*.o
 bind-9.18.17/**/*.lo

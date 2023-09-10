@@ -118,6 +118,54 @@ function request(protocol,outerRequest,outerResponse){
 	})
 }
 
+function safeSearch(outerRequest,outerResponse){
+	/* Retorna la IP o CNAME de un sitio de busqueda para:
+		- google */
+
+	/* https://www.leowkahman.com/2017/09/11/enforce-safe-search-on-google-youtube-bing/ */
+
+	if(	outerRequest.question[0].name == "www.google.com.ar" ||
+		outerRequest.question[0].name == "www.google.com" ||
+		outerRequest.question[0].name == "google.com" ||
+		outerRequest.question[0].name == "google.com.ar"
+	){
+		outerResponse.answer.push(
+			dns.A({
+				name: outerRequest.question[0].name,
+				address: "216.239.38.120",
+				ttl: 600,
+			})
+        )
+        outerResponse.send()
+		return true
+	} else if(
+		outerRequest.question[0].name == "duckduckgo.com"
+	){
+		outerResponse.answer.push(
+			dns.A({
+				name: outerRequest.question[0].name,
+				address: "191.235.126.53",
+				ttl: 600,
+			})
+        )
+        outerResponse.send()
+		return true
+	} else if(
+		outerRequest.question[0].name == "bing.com"
+	){
+		outerResponse.answer.push(
+			dns.A({
+				name: outerRequest.question[0].name,
+				address: "13.107.21.200",
+				ttl: 600,
+			})
+        )
+        outerResponse.send()
+		return true
+	} else {
+		return false
+	}
+}
 
 function proxy(outerRequest, outerResponse, logged) {
 	/*Se encarga de verificar si la consulta corresponde
@@ -157,9 +205,10 @@ function proxy(outerRequest, outerResponse, logged) {
 		outerResponse.send()
 	} else {
 		/* NO es porno */
-		console.log('request', outerRequest.question[0].name, outerRequest._socket._socket.type)
-
-		request('udp',outerRequest,outerResponse)
+		if(!safeSearch(outerRequest,outerResponse)){
+			console.log('request', outerRequest.question[0].name, outerRequest._socket._socket.type)
+			request('udp',outerRequest,outerResponse)
+		}
 	}
 
 }

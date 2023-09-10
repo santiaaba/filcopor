@@ -83,17 +83,22 @@ module.exports = [
 		p: 5
 	},
 	{	name: "Mujeres 01",
-		r: /(mujer(es)?|pendejas?|chicas?|putas?|putitas?)[\s_\-\.]?(desnudas?|en\spelotas|calientes?|en\sbolas|trolas?|follando|cogiendo|garchando|penetradas?|cogidas?|masturb)/ig,
-		p: 30
+		r: /(mujer(es)?|pendejas?|chicas?|putas?|putitas?)[\s_\-\.]?(desnudas?|en\spelotas|calientes?|en\sbolas|trolas?|follando|cogiendo|garchando|penetradas?|cogidas?|masturb|tetonas?)/ig,
+		p: 100
 	},
 	{	name: "Videos e imagenes 01",
 		r: /(im.gen(es)?|v.ideos?|libros?|historias?|clips?)[\s_\-\.]?(xxx|pornogr.ficos?|porno)/ig,
-		p: 20
+		p: 50
 	},
 	{	name: "mayor +18 01",
 		r: /soy\smayor\sde\s18\sa.os/ig,
 		p: 100
 	},
+	{	name: "palabras 01",
+		r: /[\s\.\-_](nalgonas?|culonas?|culazo|sexo|erotic[oa]|puta|verga|pija|poronga|concha|tetonas?)[\s\.\-_]/ig,
+		p: 5
+	},
+
 
 
 	/*********************   Links to porn pages ****************/

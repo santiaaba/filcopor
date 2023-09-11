@@ -9,6 +9,7 @@ dnsproxy/node_modules
 dnsproxy/.env
 robot_busqueda/.env
 robot_ponderacion/.env
+backend/.env
 
 dnsproxy/my-db/lock.mdb
 

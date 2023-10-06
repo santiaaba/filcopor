@@ -63,9 +63,13 @@ exports.login = (req, res) => {
 		const user = rows[0];
 
 		// Informamos a los DNS que dicha ip esta autenticada
+		const options = {
+			method: "POST",
+			signal: AbortSignal.timeout( 3000 )
+		}
 		try {
-			result = await fetch('http://10.10.10.2:9999/clientip/' + ip,{method: "POST"})
-			result = await fetch('http://10.10.10.3:9999/clientip/' + ip,{method: "POST"})
+			//await fetch('http://10.10.10.2:9999/clientip/' + ip, options)
+			await fetch('http://10.10.10.193:9999/clientip/' + ip, options)
 		} catch(e){
 			console.log(e)
 			return res.status(500).json({ error: 'API DNS no responde' });

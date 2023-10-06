@@ -48,6 +48,7 @@ function db_load(){
 function set_ip(req,res){
 	console.log("API set_ip: ",req.params.ip)
 	ips.add(req.params.ip)
+	res.send({messaje:"ok"})
 }
 
 function isLogged(ip){

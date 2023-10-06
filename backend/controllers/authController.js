@@ -38,7 +38,8 @@ exports.register = (req, res) => {
 // Logea a un usuario
 exports.login = (req, res) => {
   const { username, password } = req.body;
-	console.log("login - ENTRO")
+  const userIpAddress = req.ip;
+  console.log("IP: ", userIpAddress);
   db.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, rows) => {
     if (err) {
 	console.log("login: error",err)
@@ -52,13 +53,16 @@ exports.login = (req, res) => {
 
     const user = rows[0];
 
-    // Should also check active IP address
-
+    // Actualiza la ip_address del usuario en la base de datos
+    const updateUserIPQuery = 'UPDATE users SET ip_address = ? WHERE username = ?';
+    db.query(updateUserIPQuery, [userIpAddress, username], (updateError, updateResult) => {
+      if (updateError) {
+        return res.status(500).json({ error: 'Error updating IP address' });
+      }
+    });
 
     // Genera un JWT token
-	console.log("login: generando token")
-    const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-
+    const token = jwt.sign({ username: user.username, role: user.role, userIpAddress }, secretKey, { expiresIn: '12h' });
     return res.status(200).json({ message: 'Login successful', token });
   });
 };

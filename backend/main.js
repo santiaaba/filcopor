@@ -20,7 +20,7 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use((req, res, next)=>{console.log("Llego consulta",req.url);next()})
 
-db = new Database(config.db);
+//db = new Database(config.db);
 
 var path = "/v1/"
 

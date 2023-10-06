@@ -38,7 +38,6 @@ exports.register = (req, res) => {
 // Logea a un usuario
 exports.login = (req, res) => {
   const { username, password } = req.body;
-	console.log("login - ENTRO")
   db.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, rows) => {
     if (err) {
 	console.log("login: error",err)

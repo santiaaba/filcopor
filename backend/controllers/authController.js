@@ -38,13 +38,15 @@ exports.register = (req, res) => {
 // Logea a un usuario
 exports.login = (req, res) => {
   const { username, password } = req.body;
-
+	console.log("login - ENTRO")
   db.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, rows) => {
     if (err) {
+	console.log("login: error",err)
       return res.status(500).json({ error: 'Login failed' });
     }
 
     if (rows.length !== 1) {
+	console.log("login: rows.length",rows.length)
       return res.status(401).json({ error: 'Authentication failed' });
     }
 
@@ -54,6 +56,7 @@ exports.login = (req, res) => {
 
 
     // Genera un JWT token
+	console.log("login: generando token")
     const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
 
     return res.status(200).json({ message: 'Login successful', token });

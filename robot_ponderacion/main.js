@@ -41,8 +41,10 @@ function ponderamos(site){
 		p.then(ok=>{
 			if(ok.length > 0)
 				console.log("Sitios a ponderar:",ok)
-			else
+			else {
 				console.log("No hay sitios a ponderar")
+				resolv()
+			}
 			ok.forEach(s=>{
 				/* Buscamos el codigo */
 				httpClient.getSite('http',s.name)

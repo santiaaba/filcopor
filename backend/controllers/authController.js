@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const db = require('../db');
+const config = require('../config.js');
 
 // Secret key for JWT
 const secretKey = 'P0)aHX?SHfqLfkmKU=iwH.JRbfFF#!j5'; // No deberia estar hardcoded
@@ -68,8 +69,8 @@ exports.login = (req, res) => {
 			signal: AbortSignal.timeout( 3000 )
 		}
 		try {
-			//await fetch('http://10.10.10.2:9999/clientip/' + ip, options)
-			await fetch('http://10.10.10.193:9999/clientip/' + ip, options)
+			await fetch('http://' + config.apiDNS1 + ':9999/clientip/' + ip, options)
+			await fetch('http://' + config.apiDNS2 + ':9999/clientip/' + ip, options)
 		} catch(e){
 			console.log(e)
 			return res.status(500).json({ error: 'API DNS no responde' });

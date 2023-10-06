@@ -232,9 +232,11 @@ function findSites(initial){
 								console.log("Agregando a la DB:",d.domain)
 								db.query("insert into fqdn(name,domain) values(?,?)",[d.site,d.domain])
 								.then(ok=>{
+									//console.log("Agregado")
 									resolv({value:true,messaje:"Agregando: " + d.domain})
 								})
 								.catch(err=>{
+									//console.log(err)
 									resolv({value:false,messaje:"Repetido: " + d.domain})
 								})
 							})

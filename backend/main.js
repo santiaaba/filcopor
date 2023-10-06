@@ -10,8 +10,6 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 
-
-
 var app = express()
 
 /*****************************
@@ -20,6 +18,7 @@ var app = express()
 
 app.use(bodyParser.json())
 app.use(cors())
+app.use((req, res, next)=>{console.log("Llego consulta",req.url);next()})
 
 db = new Database(config.db);
 

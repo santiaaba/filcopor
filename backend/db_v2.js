@@ -26,61 +26,6 @@ class Database {
 			})
 		})
 	}
-	query_transaction(connection,sql,params){
-		return new Promise((resolve,reject) => {
-			connection.query(sql,params,(err,rows) => {
-				if(err){
-					connection.rollback(err=>{
-						console.log("Realizando ROLLBACK")
-						if(err){
-							console.log("No se pudo realizar rollback")
-						}
-					})
-					reject(err)
-				} else
-					resolve(rows)
-			})
-		})
-	}
-
-	beginTransaction(){
-		var me = this
-		return new Promise((resolv,reject) => {
-			me.connection.getConnection((err,connection)=>{
-				if(err)
-					reject(err)
-				else {
-					connection.beginTransaction(err=>{
-						connection.release()
-						reject(err)
-					})
-					resolv(connection)
-				}
-			})
-		})
-	}
-	rollback(connection){
-		return new Promise((resolv,reject) => {
-			connection.rollback(err=>{
-				console.log("Realizando ROLLBACK")
-				if(err){
-					console.log("Rollback: ",err)
-					reject(err)
-				} else
-					resolv()
-			})
-		})
-	}
-	commit(connection){
-		return new Promise((resolv,reject) => {
-			connection.commit(err=>{
-				if(err)
-					reject(err)
-				else
-					resolv()
-			})
-		})
-	}
 	is_connected(){
 		console.log(this.connection)
 		return(this.connection != undefined)

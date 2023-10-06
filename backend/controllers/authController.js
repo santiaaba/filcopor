@@ -37,30 +37,55 @@ exports.register = (req, res) => {
 
 // Logea a un usuario
 exports.login = (req, res) => {
-  const { username, password } = req.body;
-  db.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, rows) => {
-    if (err) {
-	console.log("login: error",err)
-      return res.status(500).json({ error: 'Login failed' });
-    }
+	const { username, password } = req.body;
 
-    if (rows.length !== 1) {
-	console.log("login: rows.length",rows.length)
-      return res.status(401).json({ error: 'Authentication failed' });
-    }
+	let ip = null
+	let i = 0
+	while(!ip && i < req.rawHeaders.length){
+		console.log("Revisando",req.rawHeaders[i])
+		if(req.rawHeaders[i] == 'X-Real-IP')
+		ip = req.rawHeaders[i+1]
+		i++
+	}
 
-    const user = rows[0];
+	db.query('SELECT * FROM users WHERE username = ? AND password = ?',
+	[username, password], async (err, rows) => {
+		if (err) {
+			console.log("login: error",err)
+			return res.status(500).json({ error: 'Login failed' });
+		}
 
-    // Should also check active IP address
+		if (rows.length !== 1) {
+			console.log("login: rows.length",rows.length)
+			return res.status(401).json({ error: 'Authentication failed' });
+		}
 
+		const user = rows[0];
 
-    // Genera un JWT token
-	console.log("login: generando token")
-    const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-
-    return res.status(200).json({ message: 'Login successful', token });
-  });
-};
+		// Informamos a los DNS que dicha ip esta autenticada
+		try {
+			result = await fetch('http://10.10.10.2:9999/clientip/' + ip,{method: "POST"})
+			result = await fetch('http://10.10.10.3:9999/clientip/' + ip,{method: "POST"})
+		} catch(e){
+			console.log(e)
+			return res.status(500).json({ error: 'API DNS no responde' });
+		}
+		
+		// Actualiza la ip_address del usuario en la base de datos
+		const updateUserIPQuery = 'UPDATE users SET ip_address = ? WHERE username = ?';
+		console.log("UDAPTE",ip, username)
+		db.query(updateUserIPQuery, [ip, username], (updateError, updateResult) => {
+			if (updateError) {
+				console.log(updateError)
+				return res.status(500).json({ error: 'Error updating IP address' });
+			}
+			// Genera un JWT token
+			const token = jwt.sign({ username: user.username, role: user.role, ip},
+			secretKey, { expiresIn: '12h' });
+			return res.status(200).json({ message: 'Login successful', token });
+		})
+	})
+}
 
 // Deslogea e invalida el token
 // habria que añadirlo a una blacklist tambien

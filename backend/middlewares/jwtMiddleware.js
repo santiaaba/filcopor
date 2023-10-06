@@ -5,6 +5,7 @@ const secretKey = 'P0)aHX?SHfqLfkmKU=iwH.JRbfFF#!j5'; // No deberia estar hardco
 // Middleware para validar el JWT token
 exports.verifyToken = (req, res, next) => {
     const token = req.headers.authorization;
+    console.log("JWToken: ", token);
 
     if (!token) {
         return res.status(401).json({ error: 'Unauthorized' });

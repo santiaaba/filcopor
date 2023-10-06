@@ -41,6 +41,7 @@ app.post(path + "fqdn/report", fqdn.report)
 /* Para consultar si un fqdn es o no pornográfico */
 app.get(path + "fqdn/search", fqdn.search)
 
+// para acciones relacionadas a la autenticacion del usuario
 app.use('/auth', authRoutes);
 // para acciones relacionadas al usuario
 app.use('/user', userRoutes);

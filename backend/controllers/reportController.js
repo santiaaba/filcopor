@@ -6,6 +6,7 @@ exports.newReport = (req, res) => {
 
   // Inserta el reporte en la db
   const report = { username, fqdn, comentario, valoracion };
+  console.log("Report: ", report);
 
   db.query('INSERT INTO reports SET ?', report, (err, result) => {
     if (err) {
@@ -20,7 +21,7 @@ exports.newReport = (req, res) => {
 exports.getAllReports = (req, res) => {
   const user = req.user;
 
-  if (user.role === 'admin') {
+  if (user && user.role === 'admin') {
     db.query('SELECT * FROM reports', (err, rows) => {
       if (err) {
         return res.status(500).json({ error: 'Error fetching reports' });

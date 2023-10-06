@@ -8,10 +8,13 @@ const lmdb = require('lmdb')
 const async = require('async')
 const config = require('./config.js')
 const Database = require('./db_v2.js')
+const express = require('express')
+const bodyParser = require("body-parser")
+const cors = require('cors')
 
 var SERVFAIL = packet.consts.NAME_TO_RCODE.SERVFAIL;
 
-let ips = []
+let ips = new Set()
 let tcpservers = []
 let udpservers = []
 let myDB
@@ -29,7 +32,8 @@ function db_load(){
 		db.query("call load_ip()")
 		.then(ok=>{
 			ok[0].forEach(p=>{
-				ips.push(p.ip)
+				if(p.ip_address)
+					ips.add(p.ip_address)
 			})
 			console.log("IPS:",ips)
 			resolv("Ips cargadas de la base de datos")
@@ -41,15 +45,13 @@ function db_load(){
 	})
 }
 
-function db_save_ip(){
-	/* Salva en la base de datos una ip autenticada */
+function set_ip(req,res){
+	console.log("API set_ip: ",req.params.ip)
+	ips.add(req.params.ip)
 }
 
 function isLogged(ip){
-	/* De momento siempre suponemos que
-		el usuario está autenticado */
-	//console.log("Includes ip:",ip,"result:",ips.includes(ip))
-	return !ips.includes(ip)
+	return ips.has(ip)
 }
 
 function itIsPorn(question){
@@ -168,7 +170,7 @@ function safeSearch(outerRequest,outerResponse){
 }
 
 function proxy(outerRequest, outerResponse, logged) {
-	/*Se encarga de verificar si la consulta corresponde
+	/*	Se encarga de verificar si la consulta corresponde
 		a un sitio pornográfico para una consulta del tipo "A".
 		Caso contrario traspasa la query a un DNS recursivo */
 
@@ -240,6 +242,13 @@ const onClose = function () {
 /************************
 			MAIN
 ************************/
+var app = express()
+
+app.use(bodyParser.json())
+app.use(cors())
+app.use((req, res, next)=>{console.log("Llego consulta",req.url);next()})
+
+app.post('/clientip/:ip', set_ip)
 
 console.log("Levantando DB mysql")
 db_load()
@@ -252,6 +261,13 @@ db_load()
 			path: config.lmdb.name,
 			compression: true,
 		})
+
+		console.log("Levantamos la API")
+		app.listen(config.api_port, config.api_host, function () {
+			console.log("Server running")
+			console.log('CORS-enabled')
+		})
+
 		console.log("Base de datos lmdb levantada")
 
 		config.ips.forEach(ip=>{

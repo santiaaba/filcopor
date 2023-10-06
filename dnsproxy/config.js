@@ -15,5 +15,7 @@ module.exports = {
 	cautive_loggin: process.env.LOGIN,
 	lmdb:{
 		name: "my-db"
-	}
+	},
+	api_host: process.env.API_HOST,
+	api_port: process.env.API_PORT
 }

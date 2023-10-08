@@ -2,10 +2,10 @@ const db = require('../db');
 
 // Crea un reporte
 exports.newReport = (req, res) => {
-  const { username, fqdn, comentario, valoracion } = req.body;
+  const { email, fqdn } = req.body;
 
   // Inserta el reporte en la db
-  const report = { username, fqdn, comentario, valoracion };
+  const report = { email, fqdn };
   console.log("Report: ", report);
 
   db.query('INSERT INTO reports SET ?', report, (err, result) => {

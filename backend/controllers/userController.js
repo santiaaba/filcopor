@@ -18,7 +18,11 @@ exports.getUserById = (req, res) => {
     // Elimino informacion extra innecesaria
     const userResponse = {
       id: user.id,
-      username: user.username,
+      email: user.email,
+      nomape: user.nomape,
+      telefono: user.telefono,
+      ciudad: user.ciudad,
+      provincia: user.provincia,
       estado: user.estado,
       role: user.role,
       ip_adress: user.ip_adress
@@ -28,13 +32,13 @@ exports.getUserById = (req, res) => {
   });
 };
 
-// Get a user by username
-exports.getUserByUsername = (req, res) => {
-  const { username } = req.params;
+// Get a user by email
+exports.getUserByEmail = (req, res) => {
+  const { email } = req.params;
 
-  db.query('SELECT * FROM users WHERE username = ?', [username], (err, rows) => {
+  db.query('SELECT * FROM users WHERE email = ?', [email], (err, rows) => {
     if (err) {
-      return res.status(500).json({ error: 'Error fetching user by username' });
+      return res.status(500).json({ error: 'Error fetching user by email' });
     }
 
     if (rows.length === 0) {
@@ -46,7 +50,11 @@ exports.getUserByUsername = (req, res) => {
     // Elimino informacion extra innecesaria
     const userResponse = {
       id: user.id,
-      username: user.username,
+      email: user.email,
+      nomape: user.nomape,
+      telefono: user.telefono,
+      ciudad: user.ciudad,
+      provincia: user.provincia,
       estado: user.estado,
       role: user.role,
       ip_adress: user.ip_adress

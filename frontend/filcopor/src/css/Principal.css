@@ -1,0 +1,32 @@
+
+.boton Button{
+    color: white;
+}
+
+.info{
+    margin-top: 3%;
+    color: white; 
+text-decoration: underline;
+text-decoration-color: rgb(247, 204, 16);
+}
+
+.grupo2{
+    background: rgb(247, 204, 16);
+    position:absolute;
+text-align: center;
+color: white;
+font-size: 35px;
+height: 86%;
+}
+
+.grupo3{
+    text-align: center;
+margin-top: 5px;
+border: 1px solid rgb(18, 116, 207);
+}
+
+.grupo4{
+    margin-top: 5px;
+text-align: center;   
+border:1px solid rgb(18, 116, 207);   
+}

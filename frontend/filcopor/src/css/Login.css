@@ -1,0 +1,19 @@
+.containerPrincipal{
+    position: absolute;
+    height: 100%;
+  }
+
+  .form-group{
+    margin: 90px 0px 0px 0px;
+    width: 50%;
+    text-align: center;
+  }
+  
+  .form-group2{
+    margin: 90px 0px 0px 0px;
+    text-align: center;
+  }
+
+.form-group2 h4{
+    color: white;
+  }

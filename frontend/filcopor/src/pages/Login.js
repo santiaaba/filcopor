@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField';
   href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
 />
      
-const baseUrl="http://localhost:3003/usuarios";
+const baseUrl="http://api.filcopor.com.ar:8080/auth/login";
 const cookies = new Cookies();
 
 class Login extends Component {
@@ -37,38 +37,24 @@ class Login extends Component {
         console.log(this.state.form);
     }
 
-    iniciarSesion=async()=>{
-        await axios.get(baseUrl, {params: {username: this.state.form.username, password: md5(this.state.form.password)}})
+    iniciarSesion=()=>{
+      
+         axios.post(baseUrl, {username: this.state.form.username, password: this.state.form.password})
         .then(response=>{
-            return response.data;
+            console.log(response.data)
+            cookies.set('token', response.data.token, {path: "/"});
+            window.location.href = "/principal";
         })
-        .then(response=>{
-            if(response.length>0){
-                var respuesta=response[0];
-                cookies.set('id', respuesta.id, {path: "/"});
-                cookies.set('apellido', respuesta.apellido, {path: "/"});
-                cookies.set('nombre', respuesta.nombre, {path: "/"});
-                cookies.set('username', respuesta.username, {path: "/"});
-                swal(
-                {   position: "center",
-                    icon: "success",
-                    title: "Acceso Permitido",
-                    text: "Bienvenido "+ respuesta.nombre+ " " + respuesta.apellido,
-                    timer: 3500,
-                });
-                  setTimeout(() => {window.location.href = "/principal";}, 3500);
-                }else{
-                 swal({             
-                position: "center",
-                icon: "error",
-                title: "No se permite el acceso",
-                text: "El nombre de usuario o la contraseña ingresada son incorrectos.",
-                confirmButtonText: "OK",
-            });
-            }
-        })
+        
         .catch(error=>{
             console.log(error);
+            swal({             
+              position: "center",
+              icon: "error",
+              title: "No se permite el acceso",
+              text: "El nombre de usuario o la contraseña ingresada son incorrectos.",
+              confirmButtonText: "OK",
+          });
         })
 
     }
@@ -115,7 +101,7 @@ class Login extends Component {
             />
             
             <br/> <br/>
-
+   
             <Button variant="contained"  onClick={()=> this.iniciarSesion()}>Ingresar </Button>
           </div>
           <br/><br/>

@@ -6,16 +6,16 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import '../css/Principal.css';
+import axios from 'axios';
+import swal from 'sweetalert';
+
 
 const cookies = new Cookies();
  
+const baseUrl="http://api.filcopor.com.ar:8080";
 
 class Principal extends Component {
-    state={
-        form:{
-            fqdn:''
-        }
-    }
+    
 
     
     handleChange=async e=>{
@@ -29,26 +29,39 @@ class Principal extends Component {
     }
 
     cerrarSesion=()=>{
-        cookies.remove('id',{path:"/"});
-        cookies.remove('apellido',{path:"/"});
-        cookies.remove('nombre',{path:"/"});
-        cookies.remove('username',{path:"/"});
+        cookies.remove('token',{path:"/"});
         window.location.href="./";
 
     }
 
+    informar=()=>{
+      console.log("entró");
+      axios.post(baseUrl+"/report/new", {username: "sdiaz", fqdn:"google.com.ar", comentario:"hola", valoracion:"6" },
+      {Authorization:cookies.get('token')})
+      .then(response=>{
+        alert('reporte enviado')
+      })
+        
+      .catch(error=>{
+          console.log(error);
+          swal({             
+            position: "center",
+            icon: "error",
+            title: "fallo al envío del reporte",
+            confirmButtonText: "OK",
+        }); 
+    
+       })
+
+    }
 
     componentDidMount() {
-        if(!cookies.get('username')){
+        if(!cookies.get('token')){
             window.location.href="./";
         }
     }
      render() {
 
-        console.log('id:'+ cookies.get('id'));
-        console.log('apellido:' +cookies.get('apellido'));
-        console.log('nombre:' +cookies.get('nombre'));
-        console.log('username:' +cookies.get('username'));
 
         return (
 <Box sx={{flexGrow: 1}}>
@@ -80,9 +93,7 @@ class Principal extends Component {
         <Grid  container
         direction="row" 
         xs={4}
-        justifyContent="center"
-        
-        
+        justifyContent="center"       
         >
           <div className="grupo2">Filcopor</div>
         </Grid>
@@ -94,7 +105,7 @@ class Principal extends Component {
          >
           <div className="grupo3">
             <label> <strong> Informar sitio </strong></label>
-            <div>Informar un fqdn que la cual no se ha identificado como pornográfico.</div>
+            <div>Informar un fqdn la cual no se ha identificado como un sitio pornográfico.</div>
             <br/>
             <input
               type="text"
@@ -103,16 +114,17 @@ class Principal extends Component {
               onChange={this.handleChange}
             />
             <br />
-            <Button variant="contained"  onClick={()=> this.informar()}>Informar</Button>
+            <Button variant="contained"  onClick={()=> this.informar()}>Informar </Button>
          
           </div>
         </Grid>
-        <Grid direction="row" 
+
+        <Grid 
+        direction="row" 
         xs={4}
         justifyContent="center"
-        
          >
-        <div className="grupo4" xs={4}>
+        <div className="grupo4" >
             <label><strong> Buscador de sitio </strong></label>
             <div>Buscar un fqdn la cual se determinará si es o no un sitio pornográfico</div>
             <br/>

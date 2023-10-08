@@ -176,11 +176,42 @@ function proxy(outerRequest, outerResponse, logged) {
 		Caso contrario traspasa la query a un DNS recursivo */
 
 	console.log('Request', outerRequest.question[0].name)
+
+	if( outerRequest.question[0].name == config.dashboard.url ){
+		/* La consulta es sobre el dashboard de Filcopor,
+		   respondemos con su ip */
+		outerResponse.answer.push(
+			dns.A({
+				name: outerRequest.question[0].name,
+				address: config.dashboard.ip,
+				ttl: 6000,
+			})
+		)
+		outerResponse.send()
+		return
+	}
+
+	if( outerRequest.question[0].name == config.apis.url ){
+		/* La consulta es sobre las api de Filcopor,
+		   respondemos con su ip */
+		outerResponse.answer.push(
+			dns.A({
+				name: outerRequest.question[0].name,
+				address: config.apis.ip,
+				ttl: 6000,
+			})
+		)
+		outerResponse.send()
+		return
+	}
+
+
 	if(!logged){
 		/* La ip no se reconoce como autenticada.
 			Si se trata de una clase A retornamos
-			la ip del portal cautivo. Caso contrario
-			retornamos sin sección se ANSWER */
+			la ip del portal cautivo. Para otras clases
+			de consulta de dns retornamos sin sección
+			de ANSWER */
 		if(outerRequest.question[0].type == 1){
 			outerResponse.answer.push(
 				dns.A({

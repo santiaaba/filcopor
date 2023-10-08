@@ -13,6 +13,8 @@ module.exports = {
 	},
 	cautive: process.env.CAUTIVE,
 	cautive_loggin: process.env.LOGIN,
+	dashboard: JSON.parse(process.env.DASHBOARD),
+	apis: JSON.parse(process.env.APIS),
 	lmdb:{
 		name: "my-db"
 	},

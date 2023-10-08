@@ -5,8 +5,12 @@ const v = new Validator();
 const registerSchema = {
   type: 'object',
   properties: {
-    username: { type: 'string', required: true },
+    email: { type: 'string', required: true },
     password: { type: 'string', required: true },
+    nomape: { type: 'string', required: true },
+    telefono: { type: 'string', required: true },
+    ciudad: { type: 'string', required: true },
+    provincia: { type: 'string', required: true },
   },
 };
 
@@ -14,7 +18,7 @@ const registerSchema = {
 const loginSchema = {
   type: 'object',
   properties: {
-    username: { type: 'string', required: true },
+    email: { type: 'string', required: true },
     password: { type: 'string', required: true },
   },
 };
@@ -23,10 +27,8 @@ const loginSchema = {
 const reportSchema = {
   type: 'object',
   properties: {
-    username: { type: 'string', required: true },
+    email: { type: 'string', required: true },
     fqdn: { type: 'string', required: true },
-    comentario: { type: 'string', required: false },
-    valoracion: { type: 'integer', required: true },
   },
 };
 

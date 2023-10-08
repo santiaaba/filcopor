@@ -13,12 +13,12 @@ const reportRoutes = require('./routes/reportRoutes');
 var app = express()
 
 /*****************************
- *		Main		
+ *		Main		git ig
  *****************************/
 
 app.use(bodyParser.json())
 app.use(cors())
-app.use((req, res, next)=>{console.log("Llego consulta",req.url);next()})
+app.use((req, res, next) => { console.log("Llego consulta", req.url); next() })
 
 //db = new Database(config.db);
 

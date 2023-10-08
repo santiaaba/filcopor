@@ -7,7 +7,7 @@ const userController = require('../controllers/userController')
 router.get('/:id', jwtMiddleware.verifyToken, userController.getUserById);
 
 // Get a user by username
-router.get('/username/:username', jwtMiddleware.verifyToken, userController.getUserByUsername);
+router.get('/email/:email', jwtMiddleware.verifyToken, userController.getUserByEmail);
 
 module.exports = router;
 

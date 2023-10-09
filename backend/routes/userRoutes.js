@@ -10,4 +10,3 @@ router.get('/:id', jwtMiddleware.verifyToken, userController.getUserById);
 router.get('/email/:email', jwtMiddleware.verifyToken, userController.getUserByEmail);
 
 module.exports = router;
-

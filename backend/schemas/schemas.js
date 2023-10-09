@@ -9,8 +9,7 @@ const registerSchema = {
     password: { type: 'string', required: true },
     nomape: { type: 'string', required: true },
     telefono: { type: 'string', required: true },
-    ciudad: { type: 'string', required: true },
-    provincia: { type: 'string', required: true },
+    ciudad: { type: 'integer', required: true },
   },
 };
 
@@ -27,7 +26,6 @@ const loginSchema = {
 const reportSchema = {
   type: 'object',
   properties: {
-    email: { type: 'string', required: true },
     fqdn: { type: 'string', required: true },
   },
 };
@@ -36,6 +34,7 @@ const reportSchema = {
 exports.validateRegister = (req, res, next) => {
   const result = v.validate(req.body, registerSchema);
   if (!result.valid) {
+	console.log(result)
     return res.status(400).json({ error: 'Invalid registration data' });
   }
   next();

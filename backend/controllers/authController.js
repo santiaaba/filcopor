@@ -7,12 +7,13 @@ const secretKey = 'P0)aHX?SHfqLfkmKU=iwH.JRbfFF#!j5'; // No deberia estar hardco
 
 // Registra un nuevo usuario
 exports.register = (req, res) => {
-	const { email, password, nomape, telefono, ciudad, provincia } = req.body;
+	const { email, password, nomape, telefono, ciudad } = req.body;
 
 	// Verifica los campos no esten vacios
-	if (!email || !password || !nomape || !telefono || !ciudad || !provincia
-		|| email.trim() === '' || password.trim() === '' || nomape.trim() === '' || telefono.trim() === '' || ciudad.trim() === '' || provincia.trim() === '') {
-		return res.status(400).json({ error: 'All fields are required' });
+	if (!email || !password || !nomape || !telefono || !ciudad
+		|| email.trim() === '' || password.trim() === '' ||
+			nomape.trim() === '' || telefono.trim() === '') {
+		return res.status(400).json({ error: 'Todos los campos son requeridos' });
 	}
 
 	// Verifica que el email tenga el siguiente patron
@@ -32,10 +33,12 @@ exports.register = (req, res) => {
 			return res.status(400).json({ error: 'Email is already taken' });
 		}
 		// Añadir datos faltantes del registro
-		const user = { email, password, nomape, telefono, ciudad, provincia };
+		//const user = { email, password, nomape, telefono, ciudad};
 
-		db.query('INSERT INTO users SET ?', user, (err, result) => {
+		db.query('INSERT INTO users(email,password,nomape,telefono,id_ciudad) values(?,?,?,?,?)',
+			[email, password, nomape, telefono, ciudad], (err, result) => {
 			if (err) {
+				console.log("ERROR:",err)
 				return res.status(500).json({ error: 'Registration failed' });
 			}
 
@@ -93,7 +96,7 @@ exports.login = (req, res) => {
 					return res.status(500).json({ error: 'Error updating IP address' });
 				}
 				// Genera un JWT token
-				const token = jwt.sign({ email: user.email, role: user.role, ip },
+				const token = jwt.sign({ email: user.email, role: user.role, user_id: user.id},
 					secretKey, { expiresIn: '12h' });
 				return res.status(200).json({ message: 'Login successful', token });
 			})

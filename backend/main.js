@@ -4,25 +4,29 @@ const Database = require('./db_v2.js')
 const express = require('express')
 const bodyParser = require("body-parser")
 const cors = require('cors')
-const fqdn = require ('./fqdn.js')
-const user = require ('./user.js')
+const fqdn = require('./fqdn.js')
+const user = require('./user.js')
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 var app = express()
 
 /*****************************
- *		Main		
+ *		Main		git ig
  *****************************/
 
 app.use(bodyParser.json())
 app.use(cors())
+app.use((req, res, next) => { console.log("Llego consulta", req.url); next() })
 
-db = new Database(config.db);
+//db = new Database(config.db);
 
 var path = "/v1/"
 
 /* para el login y logout */
-app.post(path + "user/login", user.login)
-app.get(path + "user/logout", user.logout)
+//app.post(path + "user/login", user.login)
+//app.get(path + "user/logout", user.logout)
 
 /* Recupero de contraseña */
 app.post(path + "restore", user.restore)
@@ -37,7 +41,14 @@ app.post(path + "fqdn/report", fqdn.report)
 /* Para consultar si un fqdn es o no pornográfico */
 app.get(path + "fqdn/search", fqdn.search)
 
-/* Para contratar y dar de baja el servicio */
+// para acciones relacionadas a la autenticacion del usuario
+app.use('/auth', authRoutes);
+// para acciones relacionadas al usuario
+app.use('/user', userRoutes);
+// para acciones relacionadas a los reportes
+app.use('/report', reportRoutes);
+
+
 app.post(path + "registry", user.registry)
 app.delete(path + "registry/:userid", user.unregistry)
 
@@ -52,7 +63,7 @@ app.get(path + "admin/fqdn/report", fqdn.reported)
 app.put(path + "admin/fqdn/report/:id", fqdn.attend_report)
 
 /***********************************/
-app.listen(config.port,function(){
+app.listen(config.port, function () {
 	console.log("Server running")
 	console.log('CORS-enabled')
 })

@@ -20,7 +20,7 @@ end //
 drop procedure if exists load_ip;
 create procedure load_ip()
 begin
-	select * from ip;
+	select ip_address from users;
 end //
 
 drop procedure if exists search_domain;

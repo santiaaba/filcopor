@@ -36,13 +36,6 @@ export default function HorizontalLinearStepper(props) {
 
   const handleSubmit =  () => {
     
-    //let data={
-    //  "nomape":"Rocio Díaz",
-      //"telefono":"12313212313",
-     // "ciudad":1,
-     // "email": "rocio@hotmail.com",
-     // "password": "1234"
-  //}
       let data=Object.assign({},user)
       delete data.provincia 
       delete data.password2

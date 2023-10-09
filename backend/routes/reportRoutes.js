@@ -10,4 +10,7 @@ router.post('/new', validateReport, reportController.newReport);
 // Retorna todos los reportes
 router.post('/all', jwtMiddleware.verifyToken, reportController.getAllReports);
 
+// Retorna si un sitio es pornografico
+router.post('/isPorn', reportController.isPorn);
+
 module.exports = router;

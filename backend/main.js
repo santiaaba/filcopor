@@ -9,7 +9,7 @@ const user = require('./user.js')
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reportRoutes = require('./routes/reportRoutes');
-
+const statesRoutes = require('./routes/statesRoutes');
 var app = express()
 
 /*****************************
@@ -48,6 +48,8 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 // para acciones relacionadas a los reportes
 app.use('/report', reportRoutes);
+// para acciones relacionadas a las regiones geograficas
+app.use('/states', statesRoutes);
 
 
 app.post(path + "registry", user.registry)

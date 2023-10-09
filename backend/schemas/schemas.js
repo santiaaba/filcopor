@@ -53,6 +53,7 @@ exports.validateLogin = (req, res, next) => {
 exports.validateReport = (req, res, next) => {
   const result = v.validate(req.body, reportSchema);
   if (!result.valid) {
+	console.log("ERROR schema:",result)
     return res.status(400).json({ error: 'Invalid report data' });
   }
   next();

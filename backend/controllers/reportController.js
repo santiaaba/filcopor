@@ -4,6 +4,8 @@ const db = require('../db');
 exports.newReport = (req, res) => {
   const { fqdn } = req.body;
 
+	console.log("NEW report body:",req.body)
+
 	let ip = null
     let i = 0
     while (!ip && i < req.rawHeaders.length) {

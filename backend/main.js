@@ -19,6 +19,7 @@ var app = express()
 app.use(bodyParser.json())
 app.use(cors())
 app.use((req, res, next) => { console.log("Llego consulta", req.url); next() })
+app.use((req, res, next) => { console.log("Llego Body:", req.body); next() })
 
 //db = new Database(config.db);
 

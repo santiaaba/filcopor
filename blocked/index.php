@@ -19,7 +19,7 @@
     </style>
 
 <body>
-    <div class="container-fluid d-flex justify-content-center align-items-center vh-100 <!--bg-warning--> "> <!--CENTRAR, ALINEAR Y PONER COLOR AMARILLO A LA PAGINA-->
+    <div class="container-fluid d-flex justify-content-center align-items-center vh-100 bg-warning "> <!--CENTRAR, ALINEAR Y PONER COLOR AMARILLO A LA PAGINA-->
         <div class="text-center"> <!--texto centrado--> 
             <h1 class="my-5">FILCOPOR</h1>
             <div id="urlShortenerForm" id="reportarUrl" class="form-container">
@@ -32,7 +32,7 @@
                                 $url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                                 $validURL = str_replace("&","&amp;",$url);
                                 return $validURL;
-                            }echo "El sitio << ".current_url()." >> ha sido filtrado";
+                            }echo "El sitio  ".current_url()."  ha sido filtrado";
 
 
                     ?>

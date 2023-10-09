@@ -39,7 +39,7 @@ class Login extends Component {
 
     iniciarSesion=()=>{
       
-         axios.post(baseUrl, {username: this.state.form.username, password: this.state.form.password})
+         axios.post(baseUrl, {email: this.state.form.username, password: this.state.form.password})
         .then(response=>{
             console.log(response.data)
             cookies.set('token', response.data.token, {path: "/"});

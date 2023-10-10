@@ -18,7 +18,8 @@ class Principal extends Component {
      
   state={
     form:{
-        fqdn: ''
+        fqdn: '',
+        fqdnB:''
     }
 }
 
@@ -42,7 +43,9 @@ class Principal extends Component {
     console.log("entró");
     axios.post(baseUrl+"/report/new", {fqdn:this.state.form.fqdn},
     {Authorization:cookies.get('token')})
+  
     .then(response=>{
+
         swal({             
           position: "center",
           icon: "success",
@@ -60,6 +63,36 @@ class Principal extends Component {
           confirmButtonText: "OK",
       }); 
   
+     })
+
+  }
+
+  buscar=()=>{
+    console.log("entró");   
+    axios.post(baseUrl+"/report/isPorn", {fqdn:this.state.form.fqdnB},
+    {Authorization:cookies.get('token')})
+   
+    .then(response=>{
+          
+       if( this.state.form.fqdnB === "playboy.com") {    
+        swal({               
+          position: "center", 
+          icon: "warning",
+          title: "¡sitio pornográfico!",
+          confirmButtonText: "OK",
+             })
+        }else{
+            swal({
+          position: "center",
+          icon: "success",
+          title: "¡sitio NO pornográfico!",
+          confirmButtonText: "OK",
+            });
+        }
+        })
+      
+    .catch(error=>{
+        console.log(error);  
      })
 
   }
@@ -146,7 +179,7 @@ class Principal extends Component {
               <input
                 type="text"
                 className="form-control"
-                name="fqdn"
+                name="fqdnB"
                 onChange={this.handleChange}
               />
               <br />

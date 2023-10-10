@@ -16,6 +16,7 @@ const steps = ["Datos Principales", "Datos de contacto", "Aceptar términos"];
 export default function HorizontalLinearStepper(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [enabled, setEnabled] = React.useState(true);
   const [user, setUser] = React.useState({
     nomape: null,
     provincia: null,
@@ -132,7 +133,7 @@ export default function HorizontalLinearStepper(props) {
         <React.Fragment>
           {activeStep === 0 && <Register1 user={user} setUser={setUser} />}
           {activeStep === 1 && <Register2 user={user} setUser={setUser} />}
-          {activeStep === 2 && <Register3 user={user} setUser={setUser} />}
+          {activeStep === 2 && <Register3 user={user} setUser={setUser} enablebutton={setEnabled} />}
 
           {/*<Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>*/}
           {}
@@ -160,8 +161,11 @@ export default function HorizontalLinearStepper(props) {
 
             <Button
               variant="contained"
+              disabled={ activeStep === steps.length - 1 ? enabled: false }
+              
               onClick={
                 activeStep === steps.length - 1 ? handleSubmit : handleNext
+
               }
             >
               {activeStep === steps.length - 1 ? "Finalizado" : "Siguiente"}

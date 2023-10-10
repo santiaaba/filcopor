@@ -8,6 +8,7 @@ function Register2(props) {
   return (
     <Grid
       container
+      padding={2}
       direction="row"
       justifyContent="center"
       alignItems="stretch"

@@ -81,6 +81,14 @@ class Principal extends Component {
           title: "¡sitio pornográfico!",
           confirmButtonText: "OK",
              })
+        } else if (this.state.form.fqdnB === "desconocido.com"){
+          swal({               
+            position: "center", 
+            icon: "warning",
+            title: "¡sitio descocnocido!",
+            text: "por favor, reporte el sitio ",
+            confirmButtonText: "OK",
+               })  
         }else{
             swal({
           position: "center",

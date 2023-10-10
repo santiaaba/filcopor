@@ -15,6 +15,13 @@ const cookies = new Cookies();
 const baseUrl = "http://api.filcopor.com.ar:8080";
 
 class Principal extends Component {
+     
+  state={
+    form:{
+        fqdn: ''
+    }
+}
+
   handleChange = async (e) => {
     await this.setState({
       form: {
@@ -30,33 +37,32 @@ class Principal extends Component {
     window.location.href = "./";
   };
 
-  informar = () => {
+  informar=()=>{
+  
     console.log("entró");
-    axios
-      .post(
-        baseUrl + "/report/new",
-        {
-          username: "sdiaz",
-          fqdn: "google.com.ar",
-          comentario: "hola",
-          valoracion: "6",
-        },
-        { Authorization: cookies.get("token") }
-      )
-      .then((response) => {
-        alert("reporte enviado");
-      })
-
-      .catch((error) => {
+    axios.post(baseUrl+"/report/new", {fqdn:this.state.form.fqdn},
+    {Authorization:cookies.get('token')})
+    .then(response=>{
+        swal({             
+          position: "center",
+          icon: "success",
+          title: "Reporte enviado",
+          confirmButtonText: "OK",
+      });
+    })
+      
+    .catch(error=>{
         console.log(error);
-        swal({
+        swal({             
           position: "center",
           icon: "error",
           title: "fallo al envío del reporte",
           confirmButtonText: "OK",
-        });
-      });
-  };
+      }); 
+  
+     })
+
+  }
 
   componentDidMount() {
     if (!cookies.get("token")) {
@@ -64,8 +70,10 @@ class Principal extends Component {
     }
   }
   render() {
+
     return (
-      <Box sx={{ flexGrow: 1 }}>
+
+      <Box sx={{flexGrow: 1}}>
         <Grid container >
           <Grid
             item
@@ -91,14 +99,14 @@ class Principal extends Component {
             direction="row"
             justifyContent="center"
             alignItems="stretch" /*className="grupo1"*/
-            sx={{ backgroundColor: "#2f5597", marginTop: "10px" }}
+            sx={{ backgroundColor: "#2f5597"}}
           >
             <div className="info"> Mi información </div>
           </Grid>
 
           <Grid container direction="row" xs={4} justifyContent="center">
             <div className="grupo2">
-              <img width={250} height={250} src={logo} />
+              <img src={logo} />
             </div>
           </Grid>
           <Grid direction="row" xs={4} justifyContent="center">
@@ -115,7 +123,7 @@ class Principal extends Component {
               <input
                 type="text"
                 className="form-control"
-                name="informar"
+                name="fqdn"
                 onChange={this.handleChange}
               />
               <br />

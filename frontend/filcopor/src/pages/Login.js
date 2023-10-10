@@ -83,7 +83,7 @@ class Login extends Component {
             <TextField
               type="text"
               id="outlined-basic "        
-              label="Usuario"
+              label="Email"
 
               className="form-control"
               name="username"
@@ -103,6 +103,17 @@ class Login extends Component {
             <br/> <br/>
    
             <Button variant="contained"  onClick={()=> this.iniciarSesion()}>Ingresar </Button>
+            <Grid
+            item
+            xs={200}
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="stretch" /*className="grupo1"*/
+            
+          >
+           <Button variant="text">Olvide mi contraseña</Button>
+          </Grid>
           </div>
           <br/><br/>
           <div>
@@ -117,11 +128,11 @@ class Login extends Component {
         <Grid item xs={6}       direction="row"
       justifyContent="center"
       alignItems="stretch" 
-    backgroundColor=" rgb(18, 116, 207)"
+    backgroundColor="#2f5597"
      >
         <div>
           <div className="form-group2">
-            <img   width= {160} src= {logo} />
+            <img   width= {250} height={250} src= {logo} />
 
             <br></br><br></br>
             <h4> Para utilizar el servicio de filtración es necesario autenticarse</h4>

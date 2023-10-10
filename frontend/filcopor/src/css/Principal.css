@@ -1,32 +1,38 @@
-
-.boton Button{
-    color: white;
+.boton Button {
+    margin-top: -5%;
+  color: white;
 }
 
-.info{
-    margin-top: 3%;
-    color: white; 
-text-decoration: underline;
-text-decoration-color: rgb(247, 204, 16);
+.info {
+  margin-top: 5%;
+  color: white;
+  text-decoration: underline;
+  text-decoration-color: #fad43a;
 }
 
-.grupo2{
-    background: rgb(247, 204, 16);
-    position:absolute;
-text-align: center;
-color: white;
-font-size: 35px;
-height: 86%;
+.grupo2 {
+    margin-top: -4%;
+  background: #fad43a;
+  position: absolute;
+  text-align: center;
+  color: white;
+  font-size: 35px;
+  height: 100%;
+  width: 20%;
 }
 
-.grupo3{
-    text-align: center;
-margin-top: 5px;
-border: 1px solid rgb(18, 116, 207);
+.grupo3 {
+  text-align: center;
+  margin-top: 40px;
+  border: 1px solid rgb(18, 116, 207);
+  height: 100%;
+  width: 90%;
 }
 
-.grupo4{
-    margin-top: 5px;
-text-align: center;   
-border:1px solid rgb(18, 116, 207);   
+.grupo4 {
+  margin-top: 40px;
+  text-align: center;
+  border: 1px solid rgb(18, 116, 207);
+  height: 100%;
+  width: 90%;
 }

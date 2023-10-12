@@ -21,8 +21,7 @@ exports.getUserById = (req, res) => {
       email: user.email,
       nomape: user.nomape,
       telefono: user.telefono,
-      ciudad: user.ciudad,
-      provincia: user.provincia,
+      id_ciudad: user.id_ciudad,
       estado: user.estado,
       role: user.role,
       ip_adress: user.ip_adress
@@ -53,8 +52,7 @@ exports.getUserByEmail = (req, res) => {
       email: user.email,
       nomape: user.nomape,
       telefono: user.telefono,
-      ciudad: user.ciudad,
-      provincia: user.provincia,
+      id_ciudad: user.id_ciudad,
       estado: user.estado,
       role: user.role,
       ip_adress: user.ip_adress

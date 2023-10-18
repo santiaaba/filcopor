@@ -1,5 +1,4 @@
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
@@ -10,7 +9,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 function Register3(props) {
   const { enablebutton, user, setUser } = props;
   const [checked, setChecked] = React.useState(false);
- 
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -21,7 +19,7 @@ function Register3(props) {
       padding={2}
       marginLeft={18}
       direction="row"
-      
+
       alignItems="stretch"
     >
       <Grid item xs={6} sx={{ backgroundColor: "white" }}>
@@ -30,12 +28,12 @@ function Register3(props) {
             sx={{ width: "700px" }}
             multiline
             rows={20}
-            InputProps={{readOnly: true}}
+            InputProps={{ readOnly: true }}
             defaultValue='
             CONTRATO DE SERVICIO SAAS (SOFTWARE COMO UN SERVICIO) 
             -----------------------------------------------------------------------------------------------
 
-            Empresa que presta el servicio SaaS: FilCoPor Sociedad de Hecho, con domicilio
+            Empresa que presta el servicio SaaS: FilCoPor SA, con domicilio
             en Av. 7 N° 776, La Plata (CP 1900), Buenos Aires, Argentina en
             adelante FilCoPor. El usuario del servicio o servicios, en adelante
             "CLIENTE", acepta las condiciones detalladas en el presente
@@ -338,8 +336,8 @@ function Register3(props) {
         </Typography>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox checked={checked} onChange={(event)=> {setChecked(event.target.checked); enablebutton(!event.target.checked)}} />}
-            label="He leido y acepto los términos y condiciones del contrato"
+            control={<Checkbox checked={checked} onChange={(event) => { setChecked(event.target.checked); enablebutton(!event.target.checked) }} />}
+            label="He leido y acepto los términos y condiciones de uso"
           />
         </FormGroup>
       </Grid>

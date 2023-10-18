@@ -9,7 +9,7 @@ const registerSchema = {
     password: { type: 'string', required: true },
     nomape: { type: 'string', required: true },
     telefono: { type: 'string', required: true },
-    ciudad: { type: 'integer', required: true },
+    id_ciudad: { type: 'integer', required: true },
   },
 };
 
@@ -34,7 +34,7 @@ const reportSchema = {
 exports.validateRegister = (req, res, next) => {
   const result = v.validate(req.body, registerSchema);
   if (!result.valid) {
-	console.log(result)
+    console.log(result)
     return res.status(400).json({ error: 'Invalid registration data' });
   }
   next();
@@ -53,7 +53,7 @@ exports.validateLogin = (req, res, next) => {
 exports.validateReport = (req, res, next) => {
   const result = v.validate(req.body, reportSchema);
   if (!result.valid) {
-	console.log("ERROR schema:",result)
+    console.log("ERROR schema:", result)
     return res.status(400).json({ error: 'Invalid report data' });
   }
   next();

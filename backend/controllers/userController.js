@@ -62,4 +62,21 @@ exports.getUserByEmail = (req, res) => {
   });
 };
 
+// Check if an email exists
+exports.checkEmail = (req, res) => {
+  const email = req.params.email;
 
+  db.query('SELECT * FROM users WHERE email = ?', [email], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error checking email' });
+    }
+
+    if (rows.length > 0) {
+      // Email existe en db
+      return res.status(200).json({ exists: true });
+    } else {
+      // Email no existe en db
+      return res.status(200).json({ exists: false });
+    }
+  });
+};

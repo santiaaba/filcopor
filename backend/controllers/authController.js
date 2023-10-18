@@ -1,18 +1,17 @@
 const jwt = require('jsonwebtoken');
 const db = require('../db');
-const config = require('../config.js');
 
 // Secret key for JWT
 const secretKey = 'P0)aHX?SHfqLfkmKU=iwH.JRbfFF#!j5'; // No deberia estar hardcoded
 
 // Registra un nuevo usuario
 exports.register = (req, res) => {
-	const { email, password, nomape, telefono, ciudad } = req.body;
+	const { email, password, nomape, telefono, id_ciudad } = req.body;
 
 	// Verifica los campos no esten vacios
-	if (!email || !password || !nomape || !telefono || !ciudad
+	if (!email || !password || !nomape || !telefono || !id_ciudad
 		|| email.trim() === '' || password.trim() === '' ||
-			nomape.trim() === '' || telefono.trim() === '') {
+		nomape.trim() === '' || telefono.trim() === '') {
 		return res.status(400).json({ error: 'Todos los campos son requeridos' });
 	}
 
@@ -32,18 +31,16 @@ exports.register = (req, res) => {
 		if (rows.length > 0) {
 			return res.status(400).json({ error: 'Email is already taken' });
 		}
-		// Añadir datos faltantes del registro
-		//const user = { email, password, nomape, telefono, ciudad};
 
 		db.query('INSERT INTO users(email,password,nomape,telefono,id_ciudad) values(?,?,?,?,?)',
-			[email, password, nomape, telefono, ciudad], (err, result) => {
-			if (err) {
-				console.log("ERROR:",err)
-				return res.status(500).json({ error: 'Registration failed' });
-			}
+			[email, password, nomape, telefono, id_ciudad], (err, result) => {
+				if (err) {
+					console.log("ERROR:", err)
+					return res.status(500).json({ error: 'Registration failed' });
+				}
 
-			return res.status(201).json({ message: 'Registration successful' });
-		});
+				return res.status(201).json({ message: 'Registration successful' });
+			});
 	});
 };
 
@@ -75,6 +72,7 @@ exports.login = (req, res) => {
 			const user = rows[0];
 
 			// Informamos a los DNS que dicha ip esta autenticada
+			/** 
 			const options = {
 				method: "POST",
 				signal: AbortSignal.timeout(3000)
@@ -86,7 +84,7 @@ exports.login = (req, res) => {
 				console.log(e)
 				return res.status(500).json({ error: 'API DNS no responde' });
 			}
-
+			**/
 			// Actualiza la ip_address del usuario en la base de datos
 			const updateUserIPQuery = 'UPDATE users SET ip_address = ? WHERE email = ?';
 			console.log("UDAPTE", ip, email)
@@ -96,7 +94,7 @@ exports.login = (req, res) => {
 					return res.status(500).json({ error: 'Error updating IP address' });
 				}
 				// Genera un JWT token
-				const token = jwt.sign({ email: user.email, role: user.role, user_id: user.id},
+				const token = jwt.sign({ email: user.email, role: user.role, user_id: user.id },
 					secretKey, { expiresIn: '12h' });
 				return res.status(200).json({ message: 'Login successful', token });
 			})

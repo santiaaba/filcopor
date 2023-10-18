@@ -71,7 +71,7 @@ exports.getCitiesByStateId = (req, res) => {
         }
 
         // Busca ciudades por estadoID
-        db.query('SELECT * FROM cities WHERE state_id = ?', [stateId], (err, cityRows) => {
+        db.query('SELECT * FROM cities WHERE id_state = ?', [stateId], (err, cityRows) => {
             if (err) {
                 return res.status(500).json({ error: 'Error fetching cities by state' });
             }

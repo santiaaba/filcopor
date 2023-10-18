@@ -69,27 +69,23 @@ class Principal extends Component {
 
   buscar=()=>{
     console.log("entró");   
-    axios.post(baseUrl+"/report/isPorn", {fqdn:this.state.form.fqdnB},
-    {Authorization:cookies.get('token')})
+    axios.post(baseUrl+"/report/isPorn", {fqdn:this.state.form.fqdnB}
+    )
    
     .then(response=>{
-          
-       if( this.state.form.fqdnB === "playboy.com") {    
+      const booleanValue = response.data.isPorn;
+
+      console.log('Valor booleano:', booleanValue);
+
+       if( booleanValue === true) {    
         swal({               
           position: "center", 
           icon: "warning",
           title: "¡sitio pornográfico!",
           confirmButtonText: "OK",
              })
-        } else if (this.state.form.fqdnB === "desconocido.com"){
-          swal({               
-            position: "center", 
-            icon: "warning",
-            title: "¡sitio descocnocido!",
-            text: "por favor, reporte el sitio ",
-            confirmButtonText: "OK",
-               })  
-        }else{
+        }  
+        else{
             swal({
           position: "center",
           icon: "success",

@@ -71,8 +71,7 @@ exports.login = (req, res) => {
 
 			const user = rows[0];
 
-			// Informamos a los DNS que dicha ip esta autenticada
-			/** 
+			// Informamos a los DNS que dicha ip esta autenticada 
 			const options = {
 				method: "POST",
 				signal: AbortSignal.timeout(3000)
@@ -84,7 +83,7 @@ exports.login = (req, res) => {
 				console.log(e)
 				return res.status(500).json({ error: 'API DNS no responde' });
 			}
-			**/
+
 			// Actualiza la ip_address del usuario en la base de datos
 			const updateUserIPQuery = 'UPDATE users SET ip_address = ? WHERE email = ?';
 			console.log("UDAPTE", ip, email)

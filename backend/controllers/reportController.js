@@ -19,7 +19,7 @@ exports.newReport = (req, res) => {
 		return res.status(500).json({ error: 'Report creation failed' });
 	}
 
-	// Obtendo el user id mediante la ip de donde viene el reporte
+	// Obtengo el user id mediante la ip de donde viene el reporte
 	db.query('select id from users where ip_address = ?', ip, (err, result) => {
 
 		if (err) {
@@ -45,19 +45,13 @@ exports.newReport = (req, res) => {
 
 // Get all reports
 exports.getAllReports = (req, res) => {
-	const user = req.user;
+	db.query('SELECT * FROM reports', (err, rows) => {
+		if (err) {
+			return res.status(500).json({ error: 'Error fetching reports' });
+		}
 
-	if (user && user.role === 'admin') {
-		db.query('SELECT * FROM reports', (err, rows) => {
-			if (err) {
-				return res.status(500).json({ error: 'Error fetching reports' });
-			}
-
-			return res.status(200).json(rows);
-		});
-	} else {
-		return res.status(403).json({ error: 'Access denied' });
-	}
+		return res.status(200).json(rows);
+	});
 };
 
 // Retorna si un sitio es pornografico

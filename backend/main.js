@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const statesRoutes = require('./routes/statesRoutes');
+const fqdnRoutes = require('./routes/fqdnRoutes');
 var app = express()
 
 /*****************************
@@ -50,7 +51,8 @@ app.use('/user', userRoutes);
 app.use('/report', reportRoutes);
 // para acciones relacionadas a las regiones geograficas
 app.use('/states', statesRoutes);
-
+// para acciones relacionadas a los fqdn
+app.use('/fqdn', fqdnRoutes);
 
 app.post(path + "registry", user.registry)
 app.delete(path + "registry/:userid", user.unregistry)

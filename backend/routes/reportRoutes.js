@@ -8,7 +8,7 @@ const reportController = require('../controllers/reportController')
 router.post('/new', validateReport, reportController.newReport);
 
 // Retorna todos los reportes
-router.post('/all', jwtMiddleware.verifyToken, reportController.getAllReports);
+router.post('/all', jwtMiddleware.verifyAdminToken, reportController.getAllReports);
 
 // Retorna si un sitio es pornografico
 router.post('/isPorn', reportController.isPorn);

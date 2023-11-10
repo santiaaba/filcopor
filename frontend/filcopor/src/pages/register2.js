@@ -4,8 +4,9 @@ import TextField from "@mui/material/TextField";
 import * as React from 'react';
 
 // Para verificar si el mail ya esta registrado, el back anda bien pero el front devuelve cualquiera
-const CHECK_EMAIL_API_URL = 'http://localhost:2525/user/check-email/:email';
-//const baseUrl = "http://api.filcopor.com.ar:8080/user/check-email/:email";
+//const CHECK_EMAIL_API_URL = 'http://localhost:2525/user/check-email/:email';
+const CHECK_EMAIL_API_URL = 'http://api.filcopor.com.ar:8080/user/check-email/:email';
+
 
 function Register2(props) {
   const { user, setUser } = props;

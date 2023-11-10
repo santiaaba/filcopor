@@ -9,8 +9,8 @@ import swal from "sweetalert";
 import logo from "../images/logo2.png";
 
 const cookies = new Cookies();
-const baseUrl = "http://localhost:2525";
-//const baseUrl = "http://api.filcopor.com.ar:8080";
+//const baseUrl = "http://localhost:2525";
+const baseUrl = "http://api.filcopor.com.ar:8080";
 
 class Principal extends Component {
 

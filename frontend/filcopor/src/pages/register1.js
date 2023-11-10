@@ -5,8 +5,11 @@ import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import { Button } from "@mui/material";
 
-const STATES_API_URL = 'http://localhost:2525/states/getStates';
-const CITIES_API_URL = 'http://localhost:2525/states/cities';
+//const STATES_API_URL = 'http://localhost:2525/states/getStates';
+//const CITIES_API_URL = 'http://localhost:2525/states/cities';
+const STATES_API_URL = 'http://api.filcopor.com.ar:8080/states/getStates';
+const CITIES_API_URL = 'http://api.filcopor.com.ar:8080/states/cities';
+
 
 function Register1(props) {
   const { user, setUser } = props;

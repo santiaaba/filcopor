@@ -11,8 +11,8 @@ import Register3 from "./register3";
 import swal from 'sweetalert';
 import axios from 'axios';
 
-const REGISTER_API_URL = 'http://localhost:2525/auth/register';
-//const REGISTER_API_URL = "http://api.filcopor.com.ar:8080/auth/register";
+//const REGISTER_API_URL = 'http://localhost:2525/auth/register';
+const REGISTER_API_URL = "http://api.filcopor.com.ar:8080/auth/register";
 
 const steps = ["Datos Principales", "Datos de contacto", "Términos y condiciones"];
 

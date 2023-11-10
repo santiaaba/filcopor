@@ -20,12 +20,12 @@ function Register(props) {
         <div className="App">
           <img src={logo} width={300} height={300} />
         </div>
-       
+
       </Grid>
       <Grid item xs={8} sx={{ backgroundColor: "white", padding: "20px" }}>
-      <Typography variant="h6" gutterBottom>
-        Registracion
-      </Typography> 
+        <Typography variant="h6" gutterBottom>
+          Registracion
+        </Typography>
         <Box>
           <HorizontalLinearStepper />
         </Box>

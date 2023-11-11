@@ -18,7 +18,7 @@ function Register1(props) {
   const [provincias, setProvincias] = React.useState([]);
   const [selectedProvince, setSelectedProvince] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
- 
+
 
   // Trae las provincias desde la API
   React.useEffect(() => {
@@ -54,29 +54,30 @@ function Register1(props) {
   }, [selectedProvince]);
 
   const handleCitySelection = (selectedCityId) => {
-    const clone = { ...user }
+    const clone = { ...user };
     clone.id_ciudad = selectedCityId;
+    console.log(selectedCityId);
     setUser(clone);
   };
-  
-  function handleChange(event){
-   
+
+  function handleChange(event) {
+
     console.log(user.nomape)
-    if(event.target.value.length >= 45 ){
-      
+    if (event.target.value.length >= 45) {
+
       setErrorMessage(
         "Supera los caracteres maximos"
       );
-      
-    }else{
+
+    } else {
       //setUser({nomape:event.target.value});
       setErrorMessage("");
       let clone = { ...user };
-              clone.nomape = event.target.value;
-              setUser(clone);
+      clone.nomape = event.target.value;
+      setUser(clone);
     }
   }
-  
+
 
   return (
     <Grid
@@ -100,13 +101,13 @@ function Register1(props) {
             id="nombre y apellido"
             type="text"
             value={user.nomape}
-           
-           /* onChange={(event) => {
-              let clone = { ...user };
-              clone.nomape = event.target.value;
-              setUser(clone);
 
-            }}*/
+            /* onChange={(event) => {
+               let clone = { ...user };
+               clone.nomape = event.target.value;
+               setUser(clone);
+ 
+             }}*/
             onChange={(event) => handleChange(event)}
             label="Nombre y Apellido"
             variant="outlined"
@@ -115,7 +116,7 @@ function Register1(props) {
             fullWidth //ancho completo
           />
           <span className='error-text'>{errorMessage}
-         </span>
+          </span>
           <Grid container>
             <Grid item xs={6}>
               <TextField
@@ -146,9 +147,6 @@ function Register1(props) {
                 value={user.ciudad}
                 onChange={(event) => {
                   handleCitySelection(event.target.value);
-                  let clone = { ...user };
-                  clone.ciudad = event.target.value;
-                  setUser(clone);
                 }}
                 label="Ciudad"
                 helperText="Por favor seleccione su ciudad"

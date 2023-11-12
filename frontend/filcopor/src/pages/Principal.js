@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import Cookies from "universal-cookie";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2";
 import "../css/Principal.css";
 import axios from "axios";
@@ -11,17 +9,16 @@ import swal from "sweetalert";
 import logo from "../images/logo2.png";
 
 const cookies = new Cookies();
-
+//const baseUrl = "http://localhost:2525";
 const baseUrl = "http://api.filcopor.com.ar:8080";
 
 class Principal extends Component {
-     
-  state={
-    form:{
-        fqdn: '',
-        fqdnB:''
-    }
-}
+  state = {
+    form: {
+      fqdn: "",
+      fqdnB: "",
+    },
+  };
 
   handleChange = async (e) => {
     await this.setState({
@@ -38,68 +35,66 @@ class Principal extends Component {
     window.location.href = "./";
   };
 
-  informar=()=>{
-  
+  informar = () => {
     console.log("entró");
-    axios.post(baseUrl+"/report/new", {fqdn:this.state.form.fqdn},
-    {Authorization:cookies.get('token')})
-  
-    .then(response=>{
+    axios
+      .post(
+        baseUrl + "/report/new",
+        { fqdn: this.state.form.fqdn },
+        { Authorization: cookies.get("token") }
+      )
 
-        swal({             
+      .then((response) => {
+        swal({
           position: "center",
           icon: "success",
           title: "Reporte enviado",
           confirmButtonText: "OK",
-      });
-    })
-      
-    .catch(error=>{
+        });
+      })
+
+      .catch((error) => {
         console.log(error);
-        swal({             
+        swal({
           position: "center",
           icon: "error",
-          title: "fallo al envío del reporte",
+          title: "Fallo al envío del reporte",
           confirmButtonText: "OK",
-      }); 
-  
-     })
+        });
+      });
+  };
 
-  }
+  buscar = () => {
+    console.log("entró");
+    axios
+      .post(baseUrl + "/report/isPorn", { fqdn: this.state.form.fqdnB })
 
-  buscar=()=>{
-    console.log("entró");   
-    axios.post(baseUrl+"/report/isPorn", {fqdn:this.state.form.fqdnB}
-    )
-   
-    .then(response=>{
-      const booleanValue = response.data.isPorn;
+      .then((response) => {
+        const booleanValue = response.data.isPorn;
 
-      console.log('Valor booleano:', booleanValue);
+        console.log("Valor booleano:", booleanValue);
 
-       if( booleanValue === true) {    
-        swal({               
-          position: "center", 
-          icon: "warning",
-          title: "¡sitio pornográfico!",
-          confirmButtonText: "OK",
-             })
-        }  
-        else{
-            swal({
-          position: "center",
-          icon: "success",
-          title: "¡sitio NO pornográfico!",
-          confirmButtonText: "OK",
-            });
+        if (booleanValue === true) {
+          swal({
+            position: "center",
+            icon: "warning",
+            title: "¡sitio pornográfico!",
+            confirmButtonText: "OK",
+          });
+        } else {
+          swal({
+            position: "center",
+            icon: "success",
+            title: "¡sitio NO pornográfico!",
+            confirmButtonText: "OK",
+          });
         }
-        })
-      
-    .catch(error=>{
-        console.log(error);  
-     })
+      })
 
-  }
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   componentDidMount() {
     if (!cookies.get("token")) {
@@ -107,11 +102,9 @@ class Principal extends Component {
     }
   }
   render() {
-
     return (
-
-      <Box sx={{flexGrow: 1}}>
-        <Grid container >
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container>
           <Grid
             item
             xs={12}
@@ -136,7 +129,7 @@ class Principal extends Component {
             direction="row"
             justifyContent="center"
             alignItems="stretch" /*className="grupo1"*/
-            sx={{ backgroundColor: "#2f5597"}}
+            sx={{ backgroundColor: "#2f5597" }}
           >
             <div className="info"> Mi información </div>
           </Grid>
@@ -175,10 +168,7 @@ class Principal extends Component {
               <label>
                 <strong> Buscador de sitio </strong>
               </label>
-              <div>
-                Buscar un fqdn la cual se determinará si es o no un sitio
-                pornográfico
-              </div>
+              <div>Buscar si un fqdn fue clasificado como pornografico</div>
               <br />
               <input
                 type="text"

@@ -21,3 +21,27 @@ exports.verifyToken = (req, res, next) => {
         next();
     });
 };
+
+// Middleware para validar el JWT token de un administrador
+exports.verifyAdminToken = (req, res, next) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ error: 'Token verification failed' });
+        }
+
+        // Verifica si el usuario tiene el rol de 'admin'
+        if (decoded.role !== 'admin') {
+            return res.status(403).json({ error: 'Unauthorized. Admin role required.' });
+        }
+
+        // Añade el token decodificado al request
+        req.user = decoded;
+        next();
+    });
+};

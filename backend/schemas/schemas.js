@@ -30,6 +30,19 @@ const reportSchema = {
   },
 };
 
+// Valida el schema de un fqdn
+const fqdnSchema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string', minLength: 1, maxLength: 200 },
+    isPorn: { type: 'string', enum: ["yes", "no", "undefined", "toPonderate", "inexist"] },
+    ponderation: { type: 'integer' },
+    domain: { type: 'string', minLength: 1, maxLength: 200 },
+  },
+  required: ['name', 'isPorn', 'ponderation', 'domain'],
+};
+
+
 // Middleware para validar los datos del registro
 exports.validateRegister = (req, res, next) => {
   const result = v.validate(req.body, registerSchema);
@@ -58,3 +71,14 @@ exports.validateReport = (req, res, next) => {
   }
   next();
 };
+
+// Middleware para validar los datos de un fqdn
+exports.validateFqdn = (req, res, next) => {
+  const result = v.validate(req.body, fqdnSchema);
+  if (!result.valid) {
+    console.log("ERROR schema:", result)
+    return res.status(400).json({ error: 'Invalid fqdn data' });
+  }
+  next();
+};
+

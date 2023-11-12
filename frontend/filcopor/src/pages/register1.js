@@ -3,63 +3,58 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
-import Register from "./register";
 import { Button } from "@mui/material";
 
-const provincias = [
-  {
-    value: 1,
-    label: "Buenos Aires",
-  },
-  {
-    value: 2,
-    label: "Ciudad Autónoma de Buenos Aires",
-  },
-  {
-    value: 3,
-    label: "Catamarca",
-  },
-  {
-    value: 4,
-    label: "Chaco",
-  },
-  {
-    value: 5,
-    label: "Jujuy",
-  },
-];
-const ciudadesaux = [
-  {
-    value: 1,
-    stateid: 1,
-    label: "Roque Perez",
-  },
-  {
-    value: 2,
-    stateid: 1,
-    label: "Lobos",
-  },
-  {
-    value: 3,
-    stateid: 1,
-    label: "Cañuelas",
-  },
-  {
-    value: 4,
-    stateid: 1,
-    label: "La Plata",
-  },
-  {
-    value: 5,
-    stateid: 3,
-    label: "Catamarca",
-  },
-];
+//const STATES_API_URL = 'http://localhost:2525/states/getStates';
+//const CITIES_API_URL = 'http://localhost:2525/states/cities';
+const STATES_API_URL = 'http://api.filcopor.com.ar:8080/states/getStates';
+const CITIES_API_URL = 'http://api.filcopor.com.ar:8080/states/cities';
+
 
 function Register1(props) {
   const { user, setUser } = props;
   const [ciudades, setCiudades] = React.useState([]);
-  console.log(user);
+  const [provincias, setProvincias] = React.useState([]);
+  const [selectedProvince, setSelectedProvince] = React.useState("");
+
+  // Trae las provincias desde la API
+  React.useEffect(() => {
+    fetch(STATES_API_URL)
+      .then((response) => response.json())
+      .then((data) => {
+        const transformedData = data.map((item) => ({
+          value: item.id,
+          label: item.name,
+        }));
+        setProvincias(transformedData);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  // Busca las ciudades en base a la provincia seleccionada
+  React.useEffect(() => {
+    if (selectedProvince) {
+      fetch(`${CITIES_API_URL}/${selectedProvince}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const transformedData = data.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }));
+          setCiudades(transformedData);
+        })
+        .catch((error) => console.error(error));
+    } else {
+
+      setCiudades([]);
+    }
+  }, [selectedProvince]);
+
+  const handleCitySelection = (selectedCityId) => {
+    const clone = { ...user };
+    clone.id_ciudad = selectedCityId;
+    setUser(clone);
+  };
 
   return (
     <Grid
@@ -84,7 +79,7 @@ function Register1(props) {
             type="text"
             value={user.nomape}
             onChange={(event) => {
-              let clone = Object.assign({}, user);
+              let clone = { ...user };
               clone.nomape = event.target.value;
               setUser(clone);
             }}
@@ -100,16 +95,14 @@ function Register1(props) {
                 id="outlined-select-currency"
                 value={user.provincia}
                 onChange={(event) => {
-                  setCiudades(
-                    ciudadesaux.filter((a) => a.stateid == event.target.value)
-                  );
-                  let clone = Object.assign({}, user);
+                  setSelectedProvince(event.target.value);
+                  let clone = { ...user };
                   clone.provincia = event.target.value;
                   setUser(clone);
                 }}
                 select
                 label="Provincia"
-                helperText="Por favor selecione su provincia"
+                helperText="Por favor seleccione su provincia"
                 margin="normal"
               >
                 {provincias.map((option) => (
@@ -125,12 +118,10 @@ function Register1(props) {
                 select
                 value={user.ciudad}
                 onChange={(event) => {
-                  let clone = Object.assign({}, user);
-                  clone.ciudad = event.target.value;
-                  setUser(clone);
+                  handleCitySelection(event.target.value);
                 }}
                 label="Ciudad"
-                helperText="Por favor selecione su ciudad"
+                helperText="Por favor seleccione su ciudad"
                 margin="normal"
               >
                 {ciudades.map((option) => (
@@ -146,7 +137,7 @@ function Register1(props) {
             label="Telefono"
             value={user.telefono}
             onChange={(event) => {
-              let clone = Object.assign({}, user);
+              let clone = { ...user };
               clone.telefono = event.target.value;
               setUser(clone);
             }}

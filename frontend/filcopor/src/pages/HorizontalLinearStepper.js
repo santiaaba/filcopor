@@ -11,19 +11,22 @@ import Register3 from "./register3";
 import swal from 'sweetalert';
 import axios from 'axios';
 
-const steps = ["Datos Principales", "Datos de contacto", "Aceptar términos"];
+//const REGISTER_API_URL = 'http://localhost:2525/auth/register';
+const REGISTER_API_URL = "http://api.filcopor.com.ar:8080/auth/register";
+
+const steps = ["Datos Principales", "Datos de contacto", "Términos y condiciones"];
 
 export default function HorizontalLinearStepper(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [enabled, setEnabled] = React.useState(true);
   const [user, setUser] = React.useState({
-    nomape: null,
-    provincia: null,
-    ciudad: null,
-    telefono: null,
     email: null,
     password: null,
+    nomape: null,
+    telefono: null,
+    id_ciudad: null,
+    provincia: null,
     password2: null,
   });
 
@@ -35,34 +38,36 @@ export default function HorizontalLinearStepper(props) {
     return skipped.has(step);
   };
 
-  const handleSubmit =  () => {
-    
-      let data=Object.assign({},user)
-      delete data.provincia 
-      delete data.password2
-      axios.post('http://api.filcopor.com.ar:8080/auth/register', data)
-     .then
-     (
-      ok =>{
-      swal(
-        {   position: "center",
-            icon: "success",
-            title: "Acceso Permitido",
-            text: "Bienvenido Usuario Registrado ",
-            timer: 3500,
-        });setTimeout(()=>  {window.location.href="principal";},3500);
-      })
-    .catch (e => {
-      console.log();
-      swal(
-        {   position: "center",
+  const handleSubmit = () => {
+    let data = Object.assign({}, user)
+    delete data.provincia
+    delete data.password2
+    console.log(user)
+    axios.post(REGISTER_API_URL, data)
+      .then
+      (
+        ok => {
+          swal(
+            {
+              position: "center",
+              icon: "success",
+              title: "Acceso Permitido",
+              text: "Bienvenido Usuario Registrado ",
+              timer: 3500,
+            }); setTimeout(() => { window.location.href = "principal"; }, 3500);
+        })
+      .catch(e => {
+        console.log();
+        swal(
+          {
+            position: "center",
             icon: "error",
             title: "Registracion fallida",
             text: "Error en la registracion",
             timer: 3500,
-        });
-    }
-    )
+          });
+      }
+      )
   };
   const handleNext = () => {
     let newSkipped = skipped;
@@ -136,7 +141,7 @@ export default function HorizontalLinearStepper(props) {
           {activeStep === 2 && <Register3 user={user} setUser={setUser} enablebutton={setEnabled} />}
 
           {/*<Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>*/}
-          {}
+          { }
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               variant="outlined"
@@ -161,8 +166,8 @@ export default function HorizontalLinearStepper(props) {
 
             <Button
               variant="contained"
-              disabled={ activeStep === steps.length - 1 ? enabled: false }
-              
+              disabled={activeStep === steps.length - 1 ? enabled : false}
+
               onClick={
                 activeStep === steps.length - 1 ? handleSubmit : handleNext
 

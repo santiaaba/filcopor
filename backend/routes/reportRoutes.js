@@ -13,4 +13,7 @@ router.post('/all', jwtMiddleware.verifyAdminToken, reportController.getAllRepor
 // Retorna si un sitio es pornografico
 router.post('/isPorn', reportController.isPorn);
 
+// Modificar estado del reporte
+router.post('/:id/updateStatus', jwtMiddleware.verifyAdminToken, reportController.updateReportState);
+
 module.exports = router;

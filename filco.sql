@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2023 at 11:02 PM
+-- Generation Time: Nov 12, 2023 at 12:36 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -2441,7 +2441,7 @@ CREATE TABLE `fqdn` (
 --
 
 INSERT INTO `fqdn` (`id`, `name`, `isPorn`, `ponderation`, `domain`) VALUES
-(1, 'theporndude.co', 'yes', 5555, 'theporndude.com'),
+(1, 'theporndude.co', 'yes', NULL, 'theporndude.com'),
 (2, 'motherless.com', 'yes', 6216, 'motherless.com'),
 (3, 'fapfappy.com', 'no', 66, 'fapfappy.com'),
 (4, 'dirtyship.com', 'yes', 5522, 'dirtyship.com'),
@@ -16475,7 +16475,8 @@ INSERT INTO `fqdn` (`id`, `name`, `isPorn`, `ponderation`, `domain`) VALUES
 (505299, 'www.camworldx.com', 'toPonderate', 0, 'camworldx.com'),
 (505303, 'pornsok.com', 'toPonderate', 0, 'pornsok.com'),
 (505358, 'adultsiteshub.com', 'toPonderate', 0, 'adultsiteshub.com'),
-(505360, 'fetishdude.com', 'toPonderate', 0, 'fetishdude.com');
+(505360, 'fetishdude.com', 'toPonderate', 0, 'fetishdude.com'),
+(505396, 'example222.com', 'no', 10, 'example-domain');
 
 -- --------------------------------------------------------
 
@@ -16487,18 +16488,18 @@ CREATE TABLE `reports` (
   `id` int(11) NOT NULL,
   `email` varchar(64) NOT NULL,
   `fqdn` varchar(64) NOT NULL,
-  `comentario` varchar(64) DEFAULT NULL,
-  `valoracion` int(1) DEFAULT NULL
+  `fechayhora` timestamp(6) NOT NULL DEFAULT current_timestamp(6),
+  `status` varchar(10) NOT NULL DEFAULT 'abierto'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `reports`
 --
 
-INSERT INTO `reports` (`id`, `email`, `fqdn`, `comentario`, `valoracion`) VALUES
-(4, 'NOadmin@gmail.com', 'poringa', NULL, NULL),
-(5, 'admin@gmail.com', 'xvideos', NULL, NULL),
-(6, 'admin@gmail.com', 'xvideos', NULL, NULL);
+INSERT INTO `reports` (`id`, `email`, `fqdn`, `fechayhora`, `status`) VALUES
+(4, 'NOadmin@gmail.com', 'poringa', '2023-11-11 22:26:18.411871', 'abierto'),
+(5, 'admin@gmail.com', 'xvideos', '2023-11-11 22:26:18.411871', 'abierto'),
+(6, 'admin@gmail.com', 'xvideos', '2023-11-11 22:26:18.411871', 'cerrado');
 
 -- --------------------------------------------------------
 
@@ -16570,7 +16571,10 @@ INSERT INTO `users` (`id`, `email`, `password`, `nomape`, `telefono`, `id_ciudad
 (20, 'nico@gmail.com', '1199', 'asdf', '2147483647', 1, 0, 'cliente', NULL),
 (21, 'nc@gmail.com', '11111', 'asddsa', '123231132', 4, 0, 'cliente', NULL),
 (22, 'v@gmail.com', '11111', 'dasasdasd', '11111111', 119, 0, 'cliente', NULL),
-(23, 'as@gmail.com', '111111', 'sdasdasdads', '11111111111', 334, 0, 'cliente', NULL);
+(23, 'as@gmail.com', '111111', 'sdasdasdads', '11111111111', 334, 0, 'cliente', NULL),
+(24, 'asd@gmail.com', '111111', 'nicolas', '242345123232', 373, 0, 'cliente', NULL),
+(25, 'casd@gmail.com', '111111', 'asdasd', '1212312332', 444, 0, 'cliente', NULL),
+(26, 'as1d@gmail.com', '111111', 'ijiijij', '11111111111111', 376, 0, 'cliente', NULL);
 
 --
 -- Indexes for dumped tables
@@ -16622,7 +16626,7 @@ ALTER TABLE `cities`
 -- AUTO_INCREMENT for table `fqdn`
 --
 ALTER TABLE `fqdn`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=505390;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=505397;
 
 --
 -- AUTO_INCREMENT for table `reports`
@@ -16640,7 +16644,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

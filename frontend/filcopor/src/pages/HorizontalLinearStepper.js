@@ -14,19 +14,18 @@ import axios from 'axios';
 //const REGISTER_API_URL = 'http://localhost:2525/auth/register';
 const REGISTER_API_URL = "http://api.filcopor.com.ar:8080/auth/register";
 
-const steps = ["Datos Principales", "Datos de contacto", "Términos y condiciones"];
+const steps = ["Datos Principales", "Datos de contacto", "Aceptar términos"];
 
 export default function HorizontalLinearStepper(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [enabled, setEnabled] = React.useState(true);
   const [user, setUser] = React.useState({
+    nomape: null,
+    id_ciudad: null,
+    telefono: null,
     email: null,
     password: null,
-    nomape: null,
-    telefono: null,
-    id_ciudad: null,
-    provincia: null,
     password2: null,
   });
 
@@ -39,10 +38,10 @@ export default function HorizontalLinearStepper(props) {
   };
 
   const handleSubmit = () => {
+
     let data = Object.assign({}, user)
     delete data.provincia
     delete data.password2
-    console.log(user)
     axios.post(REGISTER_API_URL, data)
       .then
       (

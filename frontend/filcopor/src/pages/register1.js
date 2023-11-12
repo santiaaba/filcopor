@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import { Button } from "@mui/material";
+import "../css/Register.css";
 
 //const STATES_API_URL = 'http://localhost:2525/states/getStates';
 //const CITIES_API_URL = 'http://localhost:2525/states/cities';
@@ -16,6 +17,8 @@ function Register1(props) {
   const [ciudades, setCiudades] = React.useState([]);
   const [provincias, setProvincias] = React.useState([]);
   const [selectedProvince, setSelectedProvince] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
 
   // Trae las provincias desde la API
   React.useEffect(() => {
@@ -53,8 +56,28 @@ function Register1(props) {
   const handleCitySelection = (selectedCityId) => {
     const clone = { ...user };
     clone.id_ciudad = selectedCityId;
+    console.log(selectedCityId);
     setUser(clone);
   };
+
+  function handleChange(event) {
+
+    console.log(user.nomape)
+    if (event.target.value.length >= 45) {
+
+      setErrorMessage(
+        "Supera los caracteres maximos"
+      );
+
+    } else {
+      //setUser({nomape:event.target.value});
+      setErrorMessage("");
+      let clone = { ...user };
+      clone.nomape = event.target.value;
+      setUser(clone);
+    }
+  }
+
 
   return (
     <Grid
@@ -78,17 +101,22 @@ function Register1(props) {
             id="nombre y apellido"
             type="text"
             value={user.nomape}
-            onChange={(event) => {
-              let clone = { ...user };
-              clone.nomape = event.target.value;
-              setUser(clone);
-            }}
+
+            /* onChange={(event) => {
+               let clone = { ...user };
+               clone.nomape = event.target.value;
+               setUser(clone);
+ 
+             }}*/
+            onChange={(event) => handleChange(event)}
             label="Nombre y Apellido"
             variant="outlined"
             margin="normal"
             error={false}
             fullWidth //ancho completo
           />
+          <span className='error-text'>{errorMessage}
+          </span>
           <Grid container>
             <Grid item xs={6}>
               <TextField

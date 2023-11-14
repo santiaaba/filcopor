@@ -12,8 +12,8 @@ import logo from "../images/Filcopor_5.png";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-//const baseUrl = "http://localhost:2525/auth/login";
-const baseUrl = "http://api.filcopor.com.ar:8080/auth/login";
+const baseUrl = "http://localhost:2525/auth/login";
+//const baseUrl = "http://api.filcopor.com.ar:8080/auth/login";
 const cookies = new Cookies();
 
 class Login extends Component {
@@ -35,15 +35,29 @@ class Login extends Component {
   };
 
   iniciarSesion = () => {
+    console.log("entro");
+
     axios
       .post(baseUrl, {
         email: this.state.form.username,
         password: this.state.form.password,
       })
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.userInformation.role);
+        if (response.data.userInformation.role == "admin") {
+          window.location.href = "./gestionReport";
+        } else {
+          window.location.href = "./principal";
+        }
         cookies.set("token", response.data.token, { path: "/" });
-        window.location.href = "/principal";
+        /*
+        if (cookies.get("username")) {
+          window.location.href = "./principal";
+        } else{
+          window.location.href = "./estadoDns";
+
+        }
+  */
       })
 
       .catch((error) => {

@@ -70,6 +70,10 @@ exports.login = (req, res) => {
 			}
 
 			const user = rows[0];
+			const userInformation = {
+				id: rows[0].id,
+				role: rows[0].role,
+			};
 
 			// Informamos a los DNS que dicha ip esta autenticada 
 			const options = {
@@ -95,7 +99,11 @@ exports.login = (req, res) => {
 				// Genera un JWT token
 				const token = jwt.sign({ email: user.email, role: user.role, user_id: user.id },
 					secretKey, { expiresIn: '12h' });
-				return res.status(200).json({ message: 'Login successful', token });
+				return res.status(200).json({
+					userInformation,
+					token,
+					message: 'Login successful'
+				});
 			})
 		})
 }

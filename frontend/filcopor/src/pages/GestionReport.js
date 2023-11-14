@@ -20,9 +20,6 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 const cookies = new Cookies();
 const baseUrl = "http://api.filcopor.com.ar:8080/fqdn/new";
 
-//const baseUrl = "http://localhost:2525/fqdn/new";
-const baseUrl2 = "http://localhost:2525/report/${id}/updateStatus";
-
 const GestionReport = () => {
   const [data, setData] = useState([]);
   const [fqdn, setFQDN] = useState("");
@@ -126,15 +123,15 @@ const GestionReport = () => {
     //const nombreCom = `${nombre}.com`;
     componentDidMount();
     const axiosInstance = axios.create({
-      baseURL: "http://localhost:2525", // Reemplaza con la URL de tu API
-      //baseURL: "http://api.filcopor.com.ar:8080",
+      //baseURL: "http://localhost:2525", // Reemplaza con la URL de tu API
+      baseURL: "http://api.filcopor.com.ar:8080",
 
       headers: {
         Authorization: cookies.get("token"),
       },
     });
     axiosInstance.post(
-      `http://localhost:2525/report/${identificador}/updateStatus`,
+      `http://api.filcopor.com.ar:8080/report/${identificador}/updateStatus`,
       {
         status: "cerrado",
       },
@@ -201,15 +198,15 @@ const GestionReport = () => {
     //const nombreCom = `${nombre}.com`;
     componentDidMount();
     const axiosInstance = axios.create({
-      baseURL: "http://localhost:2525", // Reemplaza con la URL de tu API
-      //baseURL: "http://api.filcopor.com.ar:8080",
+      //baseURL: "http://localhost:2525", // Reemplaza con la URL de tu API
+      baseURL: "http://api.filcopor.com.ar:8080",
       headers: {
         Authorization: cookies.get("token"),
       },
     });
     axiosInstance
       .get(
-        `http://localhost:2525/user/${identificador}`,
+        `http://api.filcopor.com.ar:8080/user/${identificador}`,
 
         { Authorization: cookies.get("token") }
       )

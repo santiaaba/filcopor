@@ -12,7 +12,8 @@ import logo from "../images/Filcopor_5.png";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-const baseUrl = "http://localhost:2525/auth/login";
+//const baseUrl = "http://localhost:2525/auth/login";
+const baseUrl = "http://api.filcopor.com.ar:8080/auth/login";
 const cookies = new Cookies();
 
 class Login extends Component {

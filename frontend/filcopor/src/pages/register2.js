@@ -15,7 +15,7 @@ function Register2(props) {
   const [passwordError, setPasswordError] = React.useState('');
 
 
-  // TO DO: re hacer todas las verificaciones... ARREGLAR LA DEL EMAIL QUE ANDA A MEDIAS!!!!!!! QUE PORQUERIAAAAAAAAA
+  
   const handleEmailBlur = async (event) => {
     const newEmail = event.target.value;
     setUser((prevUser) => ({ ...prevUser, email: newEmail }));

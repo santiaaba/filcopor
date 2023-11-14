@@ -12,12 +12,7 @@ import logo from "../images/Filcopor_5.png";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"
-/>;
-
-const baseUrl = "http://api.filcopor.com.ar:8080/auth/login";
+const baseUrl = "http://localhost:2525/auth/login";
 const cookies = new Cookies();
 
 class Login extends Component {

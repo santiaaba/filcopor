@@ -9,8 +9,8 @@ import swal from "sweetalert";
 import logo from "../images/logo2.png";
 
 const cookies = new Cookies();
-//const baseUrl = "http://localhost:2525";
-const baseUrl = "http://api.filcopor.com.ar:8080";
+const baseUrl = "http://localhost:2525";
+//const baseUrl = "http://api.filcopor.com.ar:8080";
 
 class Principal extends Component {
   state = {
@@ -37,11 +37,21 @@ class Principal extends Component {
 
   informar = () => {
     console.log("entró");
-    axios
+    const axiosInstance = axios.create({
+      //baseURL: "http://localhost:2525", // Reemplaza con la URL de tu API
+      baseURL: "http://api.filcopor.com.ar:8080",
+
+      headers: {
+        Authorization: cookies.get("token"),
+      },
+    });
+    // Realiza una solicitud con Axios
+    axiosInstance
       .post(
         baseUrl + "/report/new",
         { fqdn: this.state.form.fqdn },
-        { Authorization: cookies.get("token") }
+        { Authorization: cookies.get("token") },
+        axiosInstance
       )
 
       .then((response) => {

@@ -103,7 +103,7 @@ class Login extends Component {
                 >
                   Ingresar{" "}
                 </Button>
-                <Grid
+                {/*<Grid
                   item
                   xs={200}
                   container
@@ -112,12 +112,12 @@ class Login extends Component {
                   alignItems="stretch"
                 >
                   <Button variant="text">Olvide mi contraseña</Button>
-                </Grid>
+    </Grid>*/}
               </div>
               <br />
               <br />
               <div>
-                <label>No tengo cuenta y deseo registrarme </label>
+                <label> </label>
                 <br />
                 <br />
                 <Button variant="outlined" href="./register">

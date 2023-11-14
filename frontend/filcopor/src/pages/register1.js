@@ -8,6 +8,7 @@ import "../css/Register.css";
 
 //const STATES_API_URL = 'http://localhost:2525/states/getStates';
 //const CITIES_API_URL = 'http://localhost:2525/states/cities';
+
 const STATES_API_URL = 'http://api.filcopor.com.ar:8080/states/getStates';
 const CITIES_API_URL = 'http://api.filcopor.com.ar:8080/states/cities';
 
@@ -18,6 +19,9 @@ function Register1(props) {
   const [provincias, setProvincias] = React.useState([]);
   const [selectedProvince, setSelectedProvince] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
+  
+  const [telefonoError, setTelefonoError] = React.useState('');
+
 
 
   // Trae las provincias desde la API
@@ -77,7 +81,29 @@ function Register1(props) {
       setUser(clone);
     }
   }
+const handleTelefonoBlur = async (event) => {
+    const newTelefono = event.target.value;
+    setUser((prevUser) => ({ ...prevUser, email: newTelefono }));
 
+    setTelefonoError('');
+
+  
+
+    if (newTelefono && !validateTelefono(newTelefono)) {
+      setTelefonoError('Telefono inválido');
+      return;
+    }
+
+  
+  };
+
+  // Valida el formato del telefono
+  const validateTelefono = (telefono) => {
+    const telefonoRegex = /^[0-9]/;
+    return telefonoRegex.test(telefono);
+  };
+
+ 
 
   return (
     <Grid
@@ -169,9 +195,13 @@ function Register1(props) {
               clone.telefono = event.target.value;
               setUser(clone);
             }}
+           
             variant="outlined"
             margin="normal"
             fullWidth //ancho completo
+            onBlur={handleTelefonoBlur}
+            error={telefonoError !== ''}
+            helperText={telefonoError}
           />
         </Box>
       </Grid>

@@ -57,35 +57,37 @@ exports.register = (req, res) => {
 
 // Logea a un usuario
 exports.login = (req, res) => {
-  const { email, password } = req.body;
+	const { email, password } = req.body;
 
-  let ip = null;
-  let i = 0;
-  while (!ip && i < req.rawHeaders.length) {
-    console.log("Revisando", req.rawHeaders[i]);
-    if (req.rawHeaders[i] == "X-Real-IP") ip = req.rawHeaders[i + 1];
-    i++;
-  }
+	let ip = null
+	let i = 0
+	while (!ip && i < req.rawHeaders.length) {
+		console.log("Revisando", req.rawHeaders[i])
+		if (req.rawHeaders[i] == 'X-Real-IP')
+			ip = req.rawHeaders[i + 1]
+		i++
+	}
 
-  db.query(
-    "SELECT * FROM users WHERE email = ? AND password = ?",
-    [email, password],
-    async (err, rows) => {
-      if (err) {
-        console.log("login: error", err);
-        return res.status(500).json({ error: "Login failed" });
-      }
+	db.query('SELECT * FROM users WHERE email = ? AND password = ?',
+		[email, password], async (err, rows) => {
+			if (err) {
+				console.log("login: error", err)
+				return res.status(500).json({ error: 'Login failed' });
+			}
 
-      if (rows.length !== 1) {
-        console.log("login: rows.length", rows.length);
-        return res.status(401).json({ error: "Authentication failed" });
-      }
+			if (rows.length !== 1) {
+				console.log("login: rows.length", rows.length)
+				return res.status(401).json({ error: 'Authentication failed' });
+			}
 
-      const user = rows[0];
+			const user = rows[0];
+			const userInformation = {
+				id: rows[0].id,
+				role: rows[0].role,
+			};
 
-      // Informamos a los DNS que dicha ip esta autenticada
-      /** 
-		/*	const options = {
+			// Informamos a los DNS que dicha ip esta autenticada 
+			const options = {
 				method: "POST",
 				signal: AbortSignal.timeout(3000)
 			}
@@ -96,27 +98,26 @@ exports.login = (req, res) => {
 				console.log(e)
 				return res.status(500).json({ error: 'API DNS no responde' });
 			}
-			**/
-      // Actualiza la ip_address del usuario en la base de datos
-      const updateUserIPQuery =
-        "UPDATE users SET ip_address = ? WHERE email = ?";
-      console.log("UDAPTE", ip, email);
-      db.query(updateUserIPQuery, [ip, email], (updateError, updateResult) => {
-        if (updateError) {
-          console.log(updateError);
-          return res.status(500).json({ error: "Error updating IP address" });
-        }
-        // Genera un JWT token
-        const token = jwt.sign(
-          { email: user.email, role: user.role, user_id: user.id },
-          secretKey,
-          { expiresIn: "12h" }
-        );
-        return res.status(200).json({ message: "Login successful", token });
-      });
-    }
-  );
-};
+
+			// Actualiza la ip_address del usuario en la base de datos
+			const updateUserIPQuery = 'UPDATE users SET ip_address = ? WHERE email = ?';
+			console.log("UDAPTE", ip, email)
+			db.query(updateUserIPQuery, [ip, email], (updateError, updateResult) => {
+				if (updateError) {
+					console.log(updateError)
+					return res.status(500).json({ error: 'Error updating IP address' });
+				}
+				// Genera un JWT token
+				const token = jwt.sign({ email: user.email, role: user.role, user_id: user.id },
+					secretKey, { expiresIn: '12h' });
+				return res.status(200).json({
+					userInformation,
+					token,
+					message: 'Login successful'
+				});
+			})
+		})
+}
 
 // Deslogea e invalida el token
 // habria que añadirlo a una blacklist tambien

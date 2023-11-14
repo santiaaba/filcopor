@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 12, 2023 at 12:36 AM
+-- Generation Time: Nov 14, 2023 at 03:35 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -16486,20 +16486,18 @@ INSERT INTO `fqdn` (`id`, `name`, `isPorn`, `ponderation`, `domain`) VALUES
 
 CREATE TABLE `reports` (
   `id` int(11) NOT NULL,
-  `email` varchar(64) NOT NULL,
   `fqdn` varchar(64) NOT NULL,
   `fechayhora` timestamp(6) NOT NULL DEFAULT current_timestamp(6),
-  `status` varchar(10) NOT NULL DEFAULT 'abierto'
+  `status` varchar(10) NOT NULL DEFAULT 'abierto',
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `reports`
 --
 
-INSERT INTO `reports` (`id`, `email`, `fqdn`, `fechayhora`, `status`) VALUES
-(4, 'NOadmin@gmail.com', 'poringa', '2023-11-11 22:26:18.411871', 'abierto'),
-(5, 'admin@gmail.com', 'xvideos', '2023-11-11 22:26:18.411871', 'abierto'),
-(6, 'admin@gmail.com', 'xvideos', '2023-11-11 22:26:18.411871', 'cerrado');
+INSERT INTO `reports` (`id`, `fqdn`, `fechayhora`, `status`, `user_id`) VALUES
+(7, 'xvideos', '2023-11-14 14:30:54.034000', 'abierto', 18);
 
 -- --------------------------------------------------------
 
@@ -16566,15 +16564,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `nomape`, `telefono`, `id_ciudad`, `estado`, `role`, `ip_address`) VALUES
-(18, 'admin@gmail.com', '123456', 'admin admin', '11111111', 0, 1, 'admin', NULL),
+(18, 'admin@gmail.com', '123456', 'admin admin', '11111111', 0, 1, 'admin', '181.191.65.250'),
 (19, 'NOadmin@gmail.com', '123456', 'admin', '11111111', 0, 0, 'cliente', NULL),
 (20, 'nico@gmail.com', '1199', 'asdf', '2147483647', 1, 0, 'cliente', NULL),
-(21, 'nc@gmail.com', '11111', 'asddsa', '123231132', 4, 0, 'cliente', NULL),
-(22, 'v@gmail.com', '11111', 'dasasdasd', '11111111', 119, 0, 'cliente', NULL),
-(23, 'as@gmail.com', '111111', 'sdasdasdads', '11111111111', 334, 0, 'cliente', NULL),
-(24, 'asd@gmail.com', '111111', 'nicolas', '242345123232', 373, 0, 'cliente', NULL),
-(25, 'casd@gmail.com', '111111', 'asdasd', '1212312332', 444, 0, 'cliente', NULL),
-(26, 'as1d@gmail.com', '111111', 'ijiijij', '11111111111111', 376, 0, 'cliente', NULL);
+(21, 'nc@gmail.com', '11111', 'asddsa', '123231132', 4, 0, 'cliente', NULL);
 
 --
 -- Indexes for dumped tables
@@ -16632,7 +16625,7 @@ ALTER TABLE `fqdn`
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `states`

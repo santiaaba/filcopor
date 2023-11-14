@@ -57,4 +57,20 @@ exports.updateFqdn = (req, res) => {
     );
 };
 
+// Busca un domain en la db
+exports.searchDomain = (req, res) => {
+    const { domain } = req.body;
 
+    db.query('SELECT * FROM fqdn WHERE domain = ?', [domain], (err, result) => {
+        if (err) {
+            console.error('Error searching for DOMAIN in the database:', err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'DOMAIN not found in the database' });
+        }
+
+        return res.status(200).json(result[0]);
+    });
+};

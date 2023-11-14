@@ -10,6 +10,7 @@ import Register2 from "./register2";
 import Register3 from "./register3";
 import swal from 'sweetalert';
 import axios from 'axios';
+import Login from "./Login";
 
 //const REGISTER_API_URL = 'http://localhost:2525/auth/register';
 const REGISTER_API_URL = "http://api.filcopor.com.ar:8080/auth/register";
@@ -80,7 +81,10 @@ export default function HorizontalLinearStepper(props) {
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep === 0)
+    window.location.href = "/"
+    else
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleSkip = () => {
@@ -100,6 +104,7 @@ export default function HorizontalLinearStepper(props) {
 
   const handleReset = () => {
     setActiveStep(0);
+    //setTimeout(() => { window.location.href = "principal"; }, 3500);
   };
 
   return (
@@ -145,7 +150,7 @@ export default function HorizontalLinearStepper(props) {
             <Button
               variant="outlined"
               color="inherit"
-              disabled={activeStep === 0}
+              
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
@@ -156,7 +161,7 @@ export default function HorizontalLinearStepper(props) {
               <Button
                 variant="outlined"
                 color="inherit"
-                onClick={handleSkip}
+                onClick={handleReset}
                 sx={{ mr: 1 }}
               >
                 Cancelar

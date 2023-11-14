@@ -8,6 +8,7 @@ import "../css/Register.css";
 
 //const STATES_API_URL = 'http://localhost:2525/states/getStates';
 //const CITIES_API_URL = 'http://localhost:2525/states/cities';
+
 const STATES_API_URL = 'http://api.filcopor.com.ar:8080/states/getStates';
 const CITIES_API_URL = 'http://api.filcopor.com.ar:8080/states/cities';
 
@@ -17,7 +18,8 @@ function Register1(props) {
   const [ciudades, setCiudades] = React.useState([]);
   const [provincias, setProvincias] = React.useState([]);
   const [selectedProvince, setSelectedProvince] = React.useState("");
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [telefonoError, setTelefonoError] = React.useState('');
+  const [nameError, setNameError] = React.useState('');
 
 
   // Trae las provincias desde la API
@@ -60,24 +62,43 @@ function Register1(props) {
     setUser(clone);
   };
 
-  function handleChange(event) {
-
-    console.log(user.nomape)
-    if (event.target.value.length >= 45) {
-
-      setErrorMessage(
-        "Supera los caracteres maximos"
-      );
-
-    } else {
-      //setUser({nomape:event.target.value});
-      setErrorMessage("");
-      let clone = { ...user };
-      clone.nomape = event.target.value;
-      setUser(clone);
+  
+const handleTelefonoBlur = async (event) => {
+    const newTelefono = event.target.value;
+    setUser((prevUser) => ({ ...prevUser, telefono: newTelefono }));
+    setTelefonoError('');
+  if (newTelefono && !validateTelefono(newTelefono)) {
+      setTelefonoError('Telefono inválido');
+      return;
     }
-  }
+};
 
+  // Valida el formato del telefono
+  const validateTelefono = (telefono) => {
+    const telefonoRegex = /^[0-9]/;
+    return telefonoRegex.test(telefono);
+  };
+
+// Nombre y apellido
+  const handleNameBlur = async (event) => {
+    const newName = event.target.value;
+    
+    setNameError('');
+  if (newName && !validateName(newName)) {
+      setNameError('Nombre y apellidos inválidos');
+      return;
+    }
+};
+
+  // Valida el formato del nombre y del apellido
+  const validateName = (telefono) => {
+    const telefonoRegex = /^[0-9]*$/;
+    return telefonoRegex.test(telefono);
+  };
+
+ 
+
+ 
 
   return (
     <Grid
@@ -102,21 +123,25 @@ function Register1(props) {
             type="text"
             value={user.nomape}
 
-            /* onChange={(event) => {
+             onChange={(event) => {
                let clone = { ...user };
                clone.nomape = event.target.value;
                setUser(clone);
  
-             }}*/
-            onChange={(event) => handleChange(event)}
+             }}
+           
             label="Nombre y Apellido"
             variant="outlined"
             margin="normal"
-            error={false}
+           
             fullWidth //ancho completo
+            onBlur={handleNameBlur}
+            
+            error={nameError !== ''}
+            helperText={nameError}
+            inputProps={{ maxLength: 20 }}
           />
-          <span className='error-text'>{errorMessage}
-          </span>
+          
           <Grid container>
             <Grid item xs={6}>
               <TextField
@@ -169,9 +194,15 @@ function Register1(props) {
               clone.telefono = event.target.value;
               setUser(clone);
             }}
+           
             variant="outlined"
             margin="normal"
             fullWidth //ancho completo
+            onBlur={handleTelefonoBlur}
+            type="tel"
+            error={telefonoError !== ''}
+            helperText={telefonoError}
+            inputProps={{ maxLength: 15 }}
           />
         </Box>
       </Grid>

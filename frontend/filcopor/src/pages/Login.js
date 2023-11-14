@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import "../css/Login.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import md5 from "md5";
 import Cookies from "universal-cookie";
+import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import swal from "sweetalert";
@@ -10,14 +12,13 @@ import logo from "../images/Filcopor_5.png";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
+const baseUrl = "http://localhost:2525/auth/login";
 const cookies = new Cookies();
-//const LOGIN_API_URL = 'http://localhost:2525/auth/login';
-const LOGIN_API_URL = "http://api.filcopor.com.ar:8080/auth/login";
 
 class Login extends Component {
   state = {
     form: {
-      email: "",
+      username: "",
       password: "",
     },
   };
@@ -34,8 +35,8 @@ class Login extends Component {
 
   iniciarSesion = () => {
     axios
-      .post(LOGIN_API_URL, {
-        email: this.state.form.email,
+      .post(baseUrl, {
+        email: this.state.form.username,
         password: this.state.form.password,
       })
       .then((response) => {
@@ -49,15 +50,15 @@ class Login extends Component {
         swal({
           position: "center",
           icon: "error",
-          title: "Acceso no permitido",
-          text: "El email o la contraseña ingresada son incorrectos.",
+          title: "No se permite el acceso",
+          text: "El nombre de usuario o la contraseña ingresada son incorrectos.",
           confirmButtonText: "OK",
         });
       });
   };
 
   componentDidMount() {
-    if (cookies.get("email")) {
+    if (cookies.get("username")) {
       window.location.href = "./principal";
     }
   }
@@ -83,7 +84,7 @@ class Login extends Component {
                   id="outlined-basic "
                   label="Email"
                   className="form-control"
-                  name="email"
+                  name="username"
                   onChange={this.handleChange}
                 />
                 <br />
@@ -137,11 +138,13 @@ class Login extends Component {
             <div>
               <div className="form-group2">
                 <img width={250} height={250} src={logo} />
+
                 <br></br>
                 <br></br>
                 <h4>
                   {" "}
-                  Para utilizar el servicio es necesario autenticarse
+                  Para utilizar el servicio de filtración es necesario
+                  autenticarse
                 </h4>
               </div>
             </div>

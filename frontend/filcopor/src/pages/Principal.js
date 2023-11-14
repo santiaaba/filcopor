@@ -9,17 +9,16 @@ import swal from "sweetalert";
 import logo from "../images/logo2.png";
 
 const cookies = new Cookies();
-//const baseUrl = "http://localhost:2525";
-const baseUrl = "http://api.filcopor.com.ar:8080";
+const baseUrl = "http://localhost:2525";
+//const baseUrl = "http://api.filcopor.com.ar:8080";
 
 class Principal extends Component {
-
   state = {
     form: {
-      fqdn: '',
-      fqdnB: ''
-    }
-  }
+      fqdn: "",
+      fqdnB: "",
+    },
+  };
 
   handleChange = async (e) => {
     await this.setState({
@@ -37,13 +36,25 @@ class Principal extends Component {
   };
 
   informar = () => {
-
     console.log("entró");
-    axios.post(baseUrl + "/report/new", { fqdn: this.state.form.fqdn },
-      { Authorization: cookies.get('token') })
+    const axiosInstance = axios.create({
+      //baseURL: "http://localhost:2525", // Reemplaza con la URL de tu API
+      baseURL: "http://api.filcopor.com.ar:8080",
 
-      .then(response => {
+      headers: {
+        Authorization: cookies.get("token"),
+      },
+    });
+    // Realiza una solicitud con Axios
+    axiosInstance
+      .post(
+        baseUrl + "/report/new",
+        { fqdn: this.state.form.fqdn },
+        { Authorization: cookies.get("token") },
+        axiosInstance
+      )
 
+      .then((response) => {
         swal({
           position: "center",
           icon: "success",
@@ -52,7 +63,7 @@ class Principal extends Component {
         });
       })
 
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         swal({
           position: "center",
@@ -60,33 +71,26 @@ class Principal extends Component {
           title: "Fallo al envío del reporte",
           confirmButtonText: "OK",
         });
-
-      })
-
-  }
+      });
+  };
 
   buscar = () => {
     console.log("entró");
-    axios.post(baseUrl + "/report/isPorn", { fqdn: this.state.form.fqdnB },
-      { Authorization: cookies.get('token') })
+    axios
+      .post(baseUrl + "/report/isPorn", { fqdn: this.state.form.fqdnB })
 
-      .then(response => {
+      .then((response) => {
+        const booleanValue = response.data.isPorn;
 
-        if (this.state.form.fqdnB === "playboy.com") {
+        console.log("Valor booleano:", booleanValue);
+
+        if (booleanValue === true) {
           swal({
             position: "center",
             icon: "warning",
             title: "¡sitio pornográfico!",
             confirmButtonText: "OK",
-          })
-        } else if (this.state.form.fqdnB === "desconocido.com") {
-          swal({
-            position: "center",
-            icon: "warning",
-            title: "¡sitio descocnocido!",
-            text: "por favor, reporte el sitio ",
-            confirmButtonText: "OK",
-          })
+          });
         } else {
           swal({
             position: "center",
@@ -97,11 +101,10 @@ class Principal extends Component {
         }
       })
 
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-      })
-
-  }
+      });
+  };
 
   componentDidMount() {
     if (!cookies.get("token")) {
@@ -109,11 +112,9 @@ class Principal extends Component {
     }
   }
   render() {
-
     return (
-
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container >
+        <Grid container>
           <Grid
             item
             xs={12}
@@ -177,9 +178,7 @@ class Principal extends Component {
               <label>
                 <strong> Buscador de sitio </strong>
               </label>
-              <div>
-                Buscar si un fqdn fue clasificado como pornografico
-              </div>
+              <div>Buscar si un fqdn fue clasificado como pornografico</div>
               <br />
               <input
                 type="text"

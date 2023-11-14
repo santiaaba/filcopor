@@ -1,0 +1,69 @@
+/*.boton Button {
+    margin-top: -5%;
+  color: white;
+}*/
+
+.boton {
+    display: flex;
+   
+    /*margin-top: -5;*/
+    color: white;
+    justify-content: end;
+  
+  }
+  .info {
+    margin-top: 5%;
+    color: white;
+    text-decoration: underline;
+    text-decoration-color: #fad43a;
+  }
+  
+  .grupoA {
+      margin-top: -8%;
+    background: #fad43a;
+    position: absolute;
+    text-align: center;
+    color: white;
+    font-size: 35px;
+    height: 100%;
+    width: 20%;
+  }
+  
+  .grupoA img{
+    margin-top: 0px;
+      width: 100%;
+  }
+  
+  
+  .posicion{
+  
+    justify-Content: space-between;
+      display: flex;
+      flex-wrap: wrap;
+      
+  }
+  
+  .centrar{
+    width: 100%;
+  }
+  .grupoB{
+    display: flex;
+    flex:1;
+    justify-content: space-around;
+    text-align: center;
+    border: 1px solid rgb(18, 116, 207);
+    background: white;
+  
+  
+  }
+  
+  .grupoC {
+    flex:1;
+    background: white;
+  
+    justify-content: space-around;
+  
+    text-align: center;
+    border: 1px solid rgb(18, 116, 207);
+   
+  }
